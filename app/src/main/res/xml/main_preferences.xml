@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header android:fragment="com.chacostak.salim.classexpress.Configuration.Fragment_settings"
+        android:title="@string/pref_header_notifications">
+        <extra android:name="settings" android:value="notifications"></extra>
+    </header>
+    <header android:fragment="com.chacostak.salim.classexpress.Configuration.Fragment_settings"
+        android:title="@string/pref_header_delete_confirmations">
+        <extra android:name="settings" android:value="delete_confirmation"></extra>
+    </header>
+    <header android:fragment="com.chacostak.salim.classexpress.Configuration.Fragment_backup"
+        android:title="@string/pref_backup">
+        <extra
+            android:name="settings" android:value="backup"></extra>
+    </header>
+</preference-headers>

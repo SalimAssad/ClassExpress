@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="add_button">
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">@drawable/buttons</item>
+    </style>
+
+    <style name="layout_info_padding10">
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="layout_info_margin10">
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="buttons">
+        <item name="android:textSize">25dp</item>
+        <item name="android:textColor">#AACCFF</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">0.6</item>
+        <item name="android:background">@drawable/buttons</item>
+    </style>
+
+    <style name="home_textview">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+</resources>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Class Express</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+    <string name="add_course">ADD COURSE</string>
+    <string name="add_homework">ADD HOMEWORK</string>
+    <string name="add_teacher">ADD TEACHER</string>
+    <string name="delete">Delete</string>
+
+    <string name="notifications">Notifications</string>
+    <string name="global_notifications">Global Notifications</string>
+    <string-array name="time_before">
+        <item>5 m</item>
+        <item>10 m</item>
+        <item>15 m</item>
+        <item>30 m</item>
+        <item>1 h</item>
+        <item>2 h</item>
+        <item>3 h</item>
+        <item>5 h</item>
+        <item>10 h</item>
+        <item>1 d</item>
+        <item>2 d</item>
+        <item>3 d</item>
+        <item>5 d</item>
+        <item>6 d</item>
+    </string-array>
+
+    <string name="title_activity_courses">Courses</string>
+
+    <string name="home_course">Courses</string>
+    <string name="home_homework">Homework</string>
+    <string name="home_today">Today:</string>
+    <string name="home_this_week">This week:</string>
+    <string name="home_next_week">Next week:</string>
+    <string name="home_upcoming_events">Upcoming events...</string>
+    <string name="home_no_events">There are no upcoming events. Have fun!</string>
+
+    <string name="add_a_course">Add a course</string>
+    <string name="no_more_info">No more info...</string>
+
+    <string name="title_activity_add_course">Add course</string>
+    <string name="course_name">*Course Name</string>
+    <string name="professor_name">Teacher</string>
+    <string name="begins">*Begins:</string>
+    <string name="ends">*Ends:</string>
+    <string name="schedule">Schedule</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+    <string name="jan">jan</string>
+    <string name="feb">feb</string>
+    <string name="mar">mar</string>
+    <string name="apr">apr</string>
+    <string name="may">may</string>
+    <string name="jun">jun</string>
+    <string name="jul">jul</string>
+    <string name="aug">aug</string>
+    <string name="sep">sep</string>
+    <string name="oct">oct</string>
+    <string name="nov">nov</string>
+    <string name="dec">dec</string>
+
+    <string-array name="colors">
+        <item>#FF92DAFF</item>
+        <item>#FF5DAAFF</item>
+        <item>#FF516CFF</item>
+        <item>#FF2F8CB5</item>
+        <item>#FF0019D7</item>
+        <item>#FF3CE2BD</item>
+        <item>#FF39FF53</item>
+        <item>#FF269817</item>
+        <item>#FFAAE611</item>
+        <item>#FFFAFF10</item>
+        <item>#FFDFC100</item>
+        <item>#FFFF9746</item>
+        <item>#FFFFA400</item>
+        <item>#FFFF8F16</item>
+        <item>#FFFF692A</item>
+        <item>#FFFF2000</item>
+        <item>#FFFF7C6B</item>
+        <item>#FFD20500</item>
+        <item>#FFFF9793</item>
+        <item>#FFFF2B72</item>
+        <item>#FFFF83D0</item>
+        <item>#FFFA94FF</item>
+        <item>#FFF462FF</item>
+        <item>#FFF100FF</item>
+        <item>#FFDF50FF</item>
+        <item>#FFD000FF</item>
+        <item>#FFBE66FF</item>
+        <item>#FF9C06FF</item>
+        <item>#FFA174FF</item>
+    </string-array>
+
+
+    <string name="title">*Title:</string>
+    <string name="description">Description:</string>
+    <string name="course">Course:</string>
+    <string name="day_limit">*Day limit:</string>
+    <string name="hour_limit">Time limit:</string>
+    <string name="priority">Priority:</string>
+    <string-array name="priority">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string name="name">*Name:</string>
+    <string name="email">Email:</string>
+    <string name="web_page">Web page:</string>
+    <string name="phone">Phone:</string>
+
+    <string name="room">Room:</string>
+    <string name="exam">Exam</string>
+
+    <string name="m">m</string>
+    <string name="h">h</string>
+    <string name="d">d</string>
+
+    <string name="required_fields_empty">Error - 1 or more of the required fields are empty, can\'t save.</string>
+    <string name="course_exists">Error - the specified course already exists.</string>
+    <string name="vacation_exists">Error - the specified vacation already exists.</string>
+
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Courses</string>
+    <string name="title_section3">Homework</string>
+    <string name="title_section4">Exams</string>
+    <string name="title_section5">Teacher</string>
+    <string name="title_section6">Vacations</string>
+    <string name="title_section7">Calendar (BETA)</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_main">Class Express</string>
+    <string name="days">*Days:</string>
+    <string name="edit">Edit</string>
+    <string name="title_activity_add_homework_activity">Add homework</string>
+    <string name="title_activity_activity_homework_info">Homework info</string>
+    <string name="title_activity_add_teacher_activity">Add teacher</string>
+    <string name="title_activity_teacher_info_activity">Teacher info</string>
+    <string name="title_activity_day_courses_activity">Today\'s courses</string>
+    <string name="title_activity_upcoming_homework_activity">Upcoming homework</string>
+    <string name="title_activity_add_exam_activity">Add exam</string>
+    <string name="title_activity_exam_info_activity">Exam info</string>
+    <string name="title_activity_add_vacation_activity">Add vacation</string>
+    <string name="title_activity_vacation_info_activity">Vacation info</string>
+
+    <string name="days_left">days left</string>
+    <string name="hours_left">hours left</string>
+    <string name="minutes_left">minutes left</string>
+
+    <string name="no_courses_error">Error - Please add at least 1 course to create a homework/exam.</string>
+    <string name="yearly">Yearly</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="pref_header_delete_confirmations">Delete confirmations</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="schedule_error1">Error - An schedule already exist that day, with the same initial hour or the same ending hour...</string>
+    <string-array name="complete_months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <string-array name="abrev_days">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+    <string name="title_activity_calendar_activity">Calendar_activity</string>
+    <string name="notification_exists">Error - The same notification already exists...</string>
+
+</resources>

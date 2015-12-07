@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/schedule_info"
+    android:gravity="right">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"></View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textDays"
+        android:textSize="23dp"
+        android:layout_below="@+id/view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/copy"
+        android:src="@android:drawable/ic_menu_set_as"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/view"
+        android:layout_toLeftOf="@+id/edit"
+        android:layout_toStartOf="@+id/edit" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit"
+        android:src="@android:drawable/ic_menu_edit"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/view"
+        android:layout_toLeftOf="@+id/delete"
+        android:layout_toStartOf="@+id/delete" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete"
+        android:src="@android:drawable/ic_delete"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/view"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textHours"
+        android:textSize="20dp"
+        android:text="wfqfqefq"
+        android:layout_below="@+id/textDays"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp" />
+
+</RelativeLayout>

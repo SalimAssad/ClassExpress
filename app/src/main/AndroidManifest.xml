@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.chacostak.salim.classexpress" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".MainActivity"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Info_activities.Signature_info.Signature_info_activity"
+            android:label="@string/title_activity_courses" >
+        </activity>
+        <activity
+            android:name=".Add_course.Add_course_activity"
+            android:label="@string/title_activity_add_course" >
+        </activity>
+        <activity
+            android:name=".Add_homework.Add_homework_activity"
+            android:label="@string/title_activity_add_homework_activity" >
+        </activity>
+        <activity
+            android:name=".Info_activities.Homework_info.Homework_info_activity"
+            android:label="@string/title_activity_activity_homework_info" >
+        </activity>
+        <activity
+            android:name=".Add_teacher.Add_teacher_activity"
+            android:label="@string/title_activity_add_teacher_activity" >
+        </activity>
+        <activity
+            android:name=".Info_activities.Teacher_info.Teacher_info_activity"
+            android:label="@string/title_activity_teacher_info_activity" >
+        </activity>
+        <activity
+            android:name=".Day_courses.Day_courses_activity"
+            android:label="@string/title_activity_day_courses_activity" >
+        </activity>
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".Configuration.Settings_activity"
+            android:label="@string/title_activity_settings_activity" >
+        </activity>
+        <activity
+            android:name=".Upcoming_homework.Upcoming_homework_activity"
+            android:label="@string/title_activity_upcoming_homework_activity" >
+        </activity>
+        <activity
+            android:name=".Add_exam.Add_exam_activity"
+            android:label="@string/title_activity_add_exam_activity" >
+        </activity>
+        <activity
+            android:name=".Info_activities.Exam_info.Exam_info_activity"
+            android:label="@string/title_activity_exam_info_activity" >
+        </activity>
+        <activity
+            android:name=".Add_vacation.Add_vacation_activity"
+            android:label="@string/title_activity_add_vacation_activity" >
+        </activity>
+        <activity
+            android:name=".Info_activities.Vacation_info.Vacation_info_activity"
+            android:label="@string/title_activity_vacation_info_activity" >
+        </activity>
+        <activity
+            android:name=".Calendar.Calendar_activity"
+            android:label="@string/title_activity_calendar_activity" >
+        </activity>
+
+        <service android:name=".Services.CountDownService" />
+        <service android:name=".Services.CourseService" />
+        <service android:name=".Services.RestartService" />
+
+        <receiver
+            android:name=".Notifications.AlarmCourses"
+            android:enabled="true"
+            android:process=":remote" />
+        <receiver
+            android:name=".Notifications.AlarmEvents"
+            android:enabled="true"
+            android:process=":remote" />
+    </application>
+
+</manifest>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/view2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"></View>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/time_spinner"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_alignTop="@+id/view2"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete"
+        android:src="@android:drawable/ic_delete"
+        android:background="@android:color/transparent"
+        android:padding="3dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical|right"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/view2"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

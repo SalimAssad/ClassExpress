@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/pref_header_delete_confirmations">
+
+        <CheckBoxPreference
+            android:key="general_confirmations"
+            android:title="@string/pref_general_confirmations"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="confirmation_courses"
+            android:title="@string/pref_courses_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_schedules"
+            android:title="@string/pref_schedule_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_homework"
+            android:title="@string/pref_homework_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_exams"
+            android:title="@string/pref_exams_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_notifications"
+            android:title="@string/pref_notification_confirmation"
+            android:defaultValue="false"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_teachers"
+            android:title="@string/pref_teacher_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+
+        <CheckBoxPreference
+            android:key="confirmation_vacations"
+            android:title="@string/pref_vacation_confirmation"
+            android:defaultValue="true"
+            android:dependency="general_confirmations"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

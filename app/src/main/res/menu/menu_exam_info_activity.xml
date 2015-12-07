@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.chacostak.salim.classexpress.Info_activities.Exam_info.Exam_info_activity">
+    <item android:id="@+id/edit" android:title="@string/edit"
+        android:orderInCategory="100" android:icon="@android:drawable/ic_menu_edit" app:showAsAction="always" />
+    <item android:id="@+id/delete" android:title="@string/delete"
+        android:orderInCategory="100" android:icon="@android:drawable/ic_menu_delete" app:showAsAction="always" />
+</menu>
