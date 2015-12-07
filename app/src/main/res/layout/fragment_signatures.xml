@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.chacostak.salim.classexpress.Info_activities.Signature_info.Signature_info_activity$PlaceholderFragment"
+    tools:context=".Info_activities.Course_info.Course_info_activity$PlaceholderFragment"
     android:orientation="vertical"
     android:id="@+id/container"
     android:background="@drawable/global_background">

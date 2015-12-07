@@ -17,7 +17,7 @@ import com.chacostak.salim.classexpress.Fragment_home;
 import com.chacostak.salim.classexpress.Fragment_courses;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Services.CourseService;
-import com.chacostak.salim.classexpress.Info_activities.Signature_info.Signature_info_activity;
+import com.chacostak.salim.classexpress.Info_activities.Course_info.Course_info_activity;
 
 /**
  * Created by Salim on 08/04/2015.
@@ -102,8 +102,8 @@ public class Fragment_upcoming_course extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), Signature_info_activity.class);
-        intent.putExtra(Fragment_courses.SELECTED_SIGNATURE, signature);
+        Intent intent = new Intent(getActivity(), Course_info_activity.class);
+        intent.putExtra(Fragment_courses.SELECTED_COURSE, signature);
         startActivity(intent);
     }
 }

@@ -54,7 +54,7 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
     String newDayLimit;
     String newTimeLimit;
 
-    public static final String SIGNATURE_NAME = "SIGNATURE_NAME";
+    public static final String SIGNATURE_NAME = "COURSE_NAME";
     public static final String NAME = "NAME";
     public static final String ROOM = "ROOM";
     public static final String DAY_LIMIT = "DAY_LIMIT";

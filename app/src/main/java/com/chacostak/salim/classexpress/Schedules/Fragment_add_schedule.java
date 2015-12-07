@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Schedule_Manager;
 import com.chacostak.salim.classexpress.R;
-import com.chacostak.salim.classexpress.Info_activities.Signature_info.Fragment_signature_info;
+import com.chacostak.salim.classexpress.Info_activities.Course_info.Fragment_course_info;
 import com.chacostak.salim.classexpress.Utilities.DateValidation;
 
 /**
@@ -150,12 +150,12 @@ public class Fragment_add_schedule extends Fragment implements View.OnClickListe
                 break;
             case R.id.save:
                 boolean error = false;
-                if(Fragment_signature_info.openedFromSigInfo) {
+                if(Fragment_course_info.openedFromSigInfo) {
                     if (isBeingEdited) {
-                        if(!sch_manager.update(Fragment_signature_info.signature_parent, selected_day, 0, time_begins, time_ends, String.valueOf(days.getSelectedItem()), 0, editBegins.getText().toString(), editEnds.getText().toString()))
+                        if(!sch_manager.update(Fragment_course_info.course_parent, selected_day, 0, time_begins, time_ends, String.valueOf(days.getSelectedItem()), 0, editBegins.getText().toString(), editEnds.getText().toString()))
                             error = true;
                     }else {
-                        if(!sch_manager.insert(Fragment_signature_info.signature_parent, String.valueOf(days.getSelectedItem()), 0, editBegins.getText().toString(), editEnds.getText().toString()))
+                        if(!sch_manager.insert(Fragment_course_info.course_parent, String.valueOf(days.getSelectedItem()), 0, editBegins.getText().toString(), editEnds.getText().toString()))
                             error = true;
                     }
                 }

@@ -15,17 +15,17 @@ import java.util.ArrayList;
 /**
  * Created by Salim on 01/04/2015.
  */
-public class ActionSig implements ActionMode.Callback {
+public class ActionCou implements ActionMode.Callback {
 
-    DB_Courses_Manager sig_manager;
+    DB_Courses_Manager course_manager;
 
     ActionMode action;
     ArrayList<EventData> selected = new ArrayList<>();
 
     CustomAdapter adapter;
 
-    public ActionSig(Context activity, CustomAdapter xadapter){
-        sig_manager = new DB_Courses_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+    public ActionCou(Context activity, CustomAdapter xadapter){
+        course_manager = new DB_Courses_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
         adapter = xadapter;
     }
 
@@ -47,7 +47,7 @@ public class ActionSig implements ActionMode.Callback {
             case R.id.action_delete:
                 for(int i = 0; i < selected.size(); i++){
                     adapter.remove(selected.get(i));
-                    sig_manager.deleteSignature(selected.get(i).name);
+                    course_manager.deleteCourse(selected.get(i).name);
                 }
                 adapter.notifyDataSetChanged();
 

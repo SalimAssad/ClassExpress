@@ -25,8 +25,8 @@ import com.chacostak.salim.classexpress.Data_Base.DB_Teacher_Manager;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Schedules.Fragment_add_schedule;
 import com.chacostak.salim.classexpress.Schedules.Fragment_schedules_info;
-import com.chacostak.salim.classexpress.Info_activities.Signature_info.Fragment_signature_info;
-import com.chacostak.salim.classexpress.Info_activities.Signature_info.Signature_info_activity;
+import com.chacostak.salim.classexpress.Info_activities.Course_info.Fragment_course_info;
+import com.chacostak.salim.classexpress.Info_activities.Course_info.Course_info_activity;
 import com.chacostak.salim.classexpress.Utilities.DateValidation;
 import com.chacostak.salim.classexpress.Utilities.Validate;
 
@@ -46,7 +46,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
     EditText editBegins;
     EditText editEnds;
-    EditText editSignature;
+    EditText editCourse;
     AutoCompleteTextView editTeacher;
 
     Spinner spin_color;
@@ -60,7 +60,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     String oldColor;
 
     //NEW VALUES
-    String newSignature;
+    String newCourse;
     String newTeacher;
     String newBegins;
     String newEnds;
@@ -73,10 +73,10 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     boolean isBeingEdited = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        v = inflater.inflate(R.layout.fragment_add_signature,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.fragment_add_signature, container, false);
 
-        Fragment_signature_info.openedFromSigInfo = false; //Important, will double save if not set to false
+        Fragment_course_info.openedFromSigInfo = false; //Important, will double save if not set to false
 
         sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         sch_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -84,7 +84,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
         editBegins = (EditText) v.findViewById(R.id.edit_begins);
         editEnds = (EditText) v.findViewById(R.id.edit_ends);
-        editSignature = (EditText) v.findViewById(R.id.edit_signature_name);
+        editCourse = (EditText) v.findViewById(R.id.edit_signature_name);
         editTeacher = (AutoCompleteTextView) v.findViewById(R.id.edit_teacher);
         setAutoComplete();
 
@@ -98,15 +98,15 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
         dateValidation = new DateValidation(getActivity());
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             isBeingEdited = true;
-            oldSignature = getArguments().getString(Signature_info_activity.SIGNATURE_NAME);
-            oldTeacher = getArguments().getString(Signature_info_activity.TEACHER);
-            oldBegins = getArguments().getString(Signature_info_activity.INITIAL_DATE);
-            oldEnds = getArguments().getString(Signature_info_activity.ENDING_DATE);
-            oldColor = getArguments().getString(Signature_info_activity.COLOR);
+            oldSignature = getArguments().getString(Course_info_activity.COURSE_NAME);
+            oldTeacher = getArguments().getString(Course_info_activity.TEACHER);
+            oldBegins = getArguments().getString(Course_info_activity.INITIAL_DATE);
+            oldEnds = getArguments().getString(Course_info_activity.ENDING_DATE);
+            oldColor = getArguments().getString(Course_info_activity.COLOR);
 
-            editSignature.setText(oldSignature);
+            editCourse.setText(oldSignature);
             editTeacher.setText(oldTeacher);
             editBegins.setText(oldBegins);
             editEnds.setText(oldEnds);
@@ -117,7 +117,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
             begins = new DatePickerDialog(getActivity(), this, Integer.parseInt(begins_array[2]), dateValidation.getMonthInt(begins_array[1]), Integer.parseInt(begins_array[0]));
             ends = new DatePickerDialog(getActivity(), this, Integer.parseInt(ends_array[2]), dateValidation.getMonthInt(ends_array[1]), Integer.parseInt(ends_array[0]));
-        }else {
+        } else {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
@@ -125,17 +125,17 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
             int auxMonth, auxYear;
 
             begins = new DatePickerDialog(getActivity(), this, year, month, day);
-            ends = new DatePickerDialog(getActivity(), this, year, month+4, day);
+            ends = new DatePickerDialog(getActivity(), this, year, month + 4, day);
 
-            auxMonth = month+4;
+            auxMonth = month + 4;
             auxYear = year;
-            if(auxMonth > 11) {
+            if (auxMonth > 11) {
                 auxMonth = auxMonth - 12;
                 auxYear++;
             }
 
-            editBegins.setText(day + "/" + dateValidation.getMonthName(month)+ "/" + year);
-            editEnds.setText(day + "/" + dateValidation.getMonthName(auxMonth)+ "/" + auxYear);
+            editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+            editEnds.setText(day + "/" + dateValidation.getMonthName(auxMonth) + "/" + auxYear);
         }
 
         return v;
@@ -144,24 +144,24 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     private void setAutoComplete() {
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line);
         Cursor cursor = teacher_manager.getAll();
-        while(cursor.moveToNext())
+        while (cursor.moveToNext())
             adapter.add(cursor.getString(cursor.getColumnIndex(teacher_manager.NAME)));
         editTeacher.setAdapter(adapter);
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         Fragment_schedules_info.schedules_added.clear();
-        Fragment_signature_info.signature_parent = "";
+        Fragment_course_info.course_parent = "";
         super.onDestroy();
     }
 
-    private void prepareAdapter(){
+    private void prepareAdapter() {
         ArrayList<String> colors = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.colors)));
         adapter = new ColorSpinnerAdapter(getActivity(), R.layout.color_spinner, colors);
     }
 
-    private void prepareSpinner(){
+    private void prepareSpinner() {
         spin_color = (Spinner) v.findViewById(R.id.spinner_color);
         spin_color.setAdapter(adapter);
     }
@@ -176,7 +176,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
         v.findViewById(R.id.cancel_button).setOnClickListener(this);
         v.findViewById(R.id.add).setOnClickListener(this);
 
-        editSignature.addTextChangedListener(new textListener());
+        editCourse.addTextChangedListener(new textListener());
     }
 
     @Override
@@ -189,10 +189,10 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
                 ends.show();
                 break;
             case R.id.save_button:
-                if(!isBeingEdited && !validate())
+                if (!isBeingEdited && !validate())
                     return;
 
-                newSignature = editSignature.getText().toString();
+                newCourse = editCourse.getText().toString();
                 newTeacher = editTeacher.getText().toString();
                 newBegins = editBegins.getText().toString();
                 newEnds = editEnds.getText().toString();
@@ -200,15 +200,13 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
                 storeData();
 
-                if(getArguments() != null){
-                    Intent output = new Intent();
-                    output.putExtra(Signature_info_activity.SIGNATURE_NAME, newSignature);
-                    output.putExtra(Signature_info_activity.TEACHER, newTeacher);
-                    output.putExtra(Signature_info_activity.INITIAL_DATE, newBegins);
-                    output.putExtra(Signature_info_activity.ENDING_DATE, newEnds);
-                    output.putExtra(Signature_info_activity.COLOR, newColor);
-                    getActivity().setResult(Activity.RESULT_OK, output);
-                }
+                Intent output = new Intent();
+                output.putExtra(Course_info_activity.COURSE_NAME, newCourse);
+                output.putExtra(Course_info_activity.TEACHER, newTeacher);
+                output.putExtra(Course_info_activity.INITIAL_DATE, newBegins);
+                output.putExtra(Course_info_activity.ENDING_DATE, newEnds);
+                output.putExtra(Course_info_activity.COLOR, newColor);
+                getActivity().setResult(Activity.RESULT_OK, output);
                 getActivity().finish();
                 break;
             case R.id.cancel_button:
@@ -224,12 +222,12 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-        if(!datePicker.isShown())
+        if (!datePicker.isShown())
             return;
 
-        if(editBegins.isFocused())
+        if (editBegins.isFocused())
             editBegins.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
-        else if(editEnds.isFocused())
+        else if (editEnds.isFocused())
             editEnds.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
 
         adjustEdits(i, i2, i3);
@@ -240,7 +238,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
         String ending = editEnds.getText().toString();
 
         if (dateValidation.isAfter(start, ending)) {
-            if(editBegins.isFocused()) {
+            if (editBegins.isFocused()) {
                 if (month == 11) {
                     month = 1;
                     year += 1;
@@ -250,12 +248,12 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
                     editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
                 }
                 ends.updateDate(year, month, day);
-            }else{
+            } else {
                 if (month == 0) {
                     month = 11;
                     year -= 1;
                     editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
-                }else {
+                } else {
                     month -= 1;
                     editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
                 }
@@ -265,75 +263,74 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     }
 
 
-
     @Override
     public void onFocusChange(View view, boolean b) {
-        if(!b)
+        if (!b)
             return;
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.edit_begins:
                 begins.show();
-            break;
+                break;
             case R.id.edit_ends:
                 ends.show();
-            break;
+                break;
         }
     }
 
-    private boolean validate(){
-        if(!validateInputs()) {
-            Toast.makeText(getActivity(),R.string.required_fields_empty,Toast.LENGTH_LONG).show();
+    private boolean validate() {
+        if (!validateInputs()) {
+            Toast.makeText(getActivity(), R.string.required_fields_empty, Toast.LENGTH_LONG).show();
             return false;
-        }else if(alreadyExists()) {
-            Toast.makeText(getActivity(),R.string.course_exists,Toast.LENGTH_LONG).show();
+        } else if (alreadyExists()) {
+            Toast.makeText(getActivity(), R.string.course_exists, Toast.LENGTH_LONG).show();
             return false;
-        }else
+        } else
             return true;
     }
 
-    private boolean alreadyExists(){
-        String className = editSignature.getText().toString();
+    private boolean alreadyExists() {
+        String className = editCourse.getText().toString();
         Cursor cursor;
         cursor = sig_manager.searchByName(className);
-        if(cursor.moveToNext())
+        if (cursor.moveToNext())
             return true;
         else
             return false;
     }
 
-    private boolean validateInputs(){
+    private boolean validateInputs() {
         Validate validate = new Validate();
-        if(validate.isEmpty(editSignature.getText().toString()))
+        if (validate.isEmpty(editCourse.getText().toString()))
             return false;
-        else if(validate.isEmpty(editBegins.getText().toString()))
+        else if (validate.isEmpty(editBegins.getText().toString()))
             return false;
-        else if(validate.isEmpty(editEnds.getText().toString()))
+        else if (validate.isEmpty(editEnds.getText().toString()))
             return false;
         else
             return true;
     }
 
-    private void storeData(){
-        if(isBeingEdited)
-            sig_manager.update(oldSignature, newSignature, 0.0, newBegins, newEnds, newTeacher, newColor);
+    private void storeData() {
+        if (isBeingEdited)
+            sig_manager.update(oldSignature, newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
         else
-            sig_manager.insert(newSignature, 0.0, newBegins, newEnds, newTeacher, newColor);
+            sig_manager.insert(newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
 
 
-        if(validateTeachers())
+        if (validateTeachers())
             teacher_manager.insert(newTeacher, "", "", "");
 
-        for(int i = 0; i < Fragment_schedules_info.schedules_added.size(); i++){
-            sch_manager.insert(newSignature, Fragment_schedules_info.schedules_added.get(i).day, 0, Fragment_schedules_info.schedules_added.get(i).hour_begins,
+        for (int i = 0; i < Fragment_schedules_info.schedules_added.size(); i++) {
+            sch_manager.insert(newCourse, Fragment_schedules_info.schedules_added.get(i).day, 0, Fragment_schedules_info.schedules_added.get(i).hour_begins,
                     Fragment_schedules_info.schedules_added.get(i).hour_ends);
         }
     }
 
     private boolean validateTeachers() {
         Validate validate = new Validate();
-        if(validate.isEmpty(newTeacher))
+        if (validate.isEmpty(newTeacher))
             return false;
-        else if(teacher_manager.searchByName(newTeacher).moveToNext())
+        else if (teacher_manager.searchByName(newTeacher).moveToNext())
             return false;
         else
             return true;

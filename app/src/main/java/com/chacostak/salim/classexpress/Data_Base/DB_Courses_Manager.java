@@ -94,7 +94,7 @@ public class DB_Courses_Manager {
         return content;
     }
 
-    public void deleteSignature(String sigTarget){
+    public void deleteCourse(String sigTarget){
         db.delete(TABLE, SIGNATURE + "=?", new String[]{sigTarget});
         new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteBySignature(sigTarget);
         new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteBySignature(sigTarget);

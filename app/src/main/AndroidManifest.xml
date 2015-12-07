@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Info_activities.Signature_info.Signature_info_activity"
+            android:name=".Info_activities.Course_info.Course_info_activity"
             android:label="@string/title_activity_courses" >
         </activity>
         <activity

@@ -15,7 +15,7 @@ import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Schedule_Manager;
 import com.chacostak.salim.classexpress.R;
 
-import com.chacostak.salim.classexpress.Info_activities.Signature_info.Fragment_signature_info;
+import com.chacostak.salim.classexpress.Info_activities.Course_info.Fragment_course_info;
 import com.chacostak.salim.classexpress.Utilities.Dialogs;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class Fragment_schedules_info extends Fragment implements View.OnClickLis
     }
 
     private void delete() {
-        sch_manager.delete(Fragment_signature_info.signature_parent,day,0,hour_begins,hour_ends);
+        sch_manager.delete(Fragment_course_info.course_parent,day,0,hour_begins,hour_ends);
         getFragmentManager().beginTransaction().remove(this)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
     }

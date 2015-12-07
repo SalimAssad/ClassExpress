@@ -23,7 +23,7 @@ import java.util.Calendar;
  */
 public class AlarmCourses extends WakefulBroadcastReceiver {
 
-    static DB_Notifications_Manager notifications_manager = null;
+    DB_Notifications_Manager notifications_manager = null;
     DB_Schedule_Manager schedule_manager = null;
     DB_Courses_Manager courses_manager = null;
 
@@ -46,8 +46,6 @@ public class AlarmCourses extends WakefulBroadcastReceiver {
             dateValidation = new DateValidation(context);
         if (notifications_manager == null)
             notifications_manager = new DB_Notifications_Manager(context, DB_Helper.DB_Name, DB_Helper.DB_Version);
-        if (dateValidation == null)
-            dateValidation = new DateValidation(context);
         if (alarmHandler == null)
             alarmHandler = new AlarmHandler();
         if (activity == null)
@@ -68,8 +66,6 @@ public class AlarmCourses extends WakefulBroadcastReceiver {
                 new SystemManager(context).createNotification(course, alarm + " " + context.getString(R.string.minutes_left));
             }
         }
-
-        //android.os.Debug.waitForDebugger();  // this line is key
 
         setNextAlarm(alarm, course, initial_time);
     }
@@ -182,8 +178,6 @@ public class AlarmCourses extends WakefulBroadcastReceiver {
             c2.set(Calendar.MINUTE, Integer.parseInt(initialTimeArray[1].split(" ")[0]));
             c2.add(Calendar.MINUTE, -lastAlarm);
             if (c2.after(c1)) {
-                new SystemManager(activity).createNotification("c1", c1.get(Calendar.DAY_OF_MONTH) + " " + c1.get(Calendar.HOUR_OF_DAY) + ":" + c1.get(Calendar.MINUTE));
-                new SystemManager(activity).createNotification("c2", c2.get(Calendar.DAY_OF_MONTH) + " " + c2.get(Calendar.HOUR_OF_DAY) + ":" + c2.get(Calendar.MINUTE));
                 aux = c2.getTimeInMillis() - c1.getTimeInMillis();
                 if (aux < remainingTime) {
                     remainingTime = aux;

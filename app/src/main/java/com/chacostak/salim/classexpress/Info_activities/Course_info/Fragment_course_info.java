@@ -1,4 +1,4 @@
-package com.chacostak.salim.classexpress.Info_activities.Signature_info;
+package com.chacostak.salim.classexpress.Info_activities.Course_info;
 
 import android.app.FragmentTransaction;
 import android.database.Cursor;
@@ -23,16 +23,16 @@ import com.chacostak.salim.classexpress.Schedules.Fragment_schedules_info;
 /**
  * Created by Salim on 27/03/2015.
  */
-public class Fragment_signature_info extends android.app.Fragment implements View.OnClickListener {
+public class Fragment_course_info extends android.app.Fragment implements View.OnClickListener {
 
     View v;
-    TextView textSignature, textTeacher, textDates, textEnds;
+    TextView textSignature, textTeacher, textDates;
 
     Cursor cursor;
-    DB_Courses_Manager sig_manager;
+    DB_Courses_Manager cursor_manager;
     DB_Schedule_Manager sch_manager;
 
-    String signature_name;
+    String course_name;
     String teacher;
     String initial_date;
     String ending_date;
@@ -40,7 +40,7 @@ public class Fragment_signature_info extends android.app.Fragment implements Vie
 
     boolean wasEdited = false;
 
-    public static String signature_parent;
+    public static String course_parent;
     public static boolean openedFromSigInfo = false;
 
     @Override
@@ -49,23 +49,23 @@ public class Fragment_signature_info extends android.app.Fragment implements Vie
 
         openedFromSigInfo = true;
 
-        sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        cursor_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         sch_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
         if(savedInstanceState != null)
-            signature_name = savedInstanceState.getString(Signature_info_activity.SIGNATURE_NAME);
+            course_name = savedInstanceState.getString(Course_info_activity.COURSE_NAME);
         else if(!wasEdited)
-            signature_name = getArguments().getString(Fragment_courses.SELECTED_SIGNATURE);
+            course_name = getArguments().getString(Fragment_courses.SELECTED_COURSE);
 
         if (!wasEdited) {
-            cursor = sig_manager.searchByName(signature_name);
+            cursor = cursor_manager.searchByName(course_name);
             cursor.moveToNext();//If this is true, then it has not been edited
             initializeAtributtes();
         }
 
         initializeTexts();
 
-        cursor = sch_manager.searchBySignature(signature_name);
+        cursor = sch_manager.searchBySignature(course_name);
 
         if(savedInstanceState == null) {
             showSchedule();
@@ -78,21 +78,21 @@ public class Fragment_signature_info extends android.app.Fragment implements Vie
 
         v.findViewById(R.id.add).setOnClickListener(this);
 
-        getActivity().setTitle(signature_name);
+        getActivity().setTitle(course_name);
 
         return v;
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
-        savedInstanceState.putString(Signature_info_activity.SIGNATURE_NAME, signature_name);
+        savedInstanceState.putString(Course_info_activity.COURSE_NAME, course_name);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void onDestroy(){
         Fragment_schedules_info.schedules_added.clear();
-        signature_parent = "";
+        course_parent = "";
         openedFromSigInfo = false;
         super.onDestroy();
     }
@@ -124,7 +124,7 @@ public class Fragment_signature_info extends android.app.Fragment implements Vie
         textTeacher = (TextView) v.findViewById(R.id.showTeacher);
         textDates = (TextView) v.findViewById(R.id.showDates);
 
-        textSignature.setText(signature_name);
+        textSignature.setText(course_name);
         textTeacher.setText(teacher);
         textDates.setText(initial_date + " - " + ending_date);
 
@@ -133,12 +133,12 @@ public class Fragment_signature_info extends android.app.Fragment implements Vie
     }
 
     private void initializeAtributtes() {
-        signature_name = cursor.getString(cursor.getColumnIndex(sig_manager.SIGNATURE));
-        signature_parent = signature_name;
-        teacher = cursor.getString(cursor.getColumnIndex(sig_manager.TEACHER_NAME));
-        initial_date = cursor.getString(cursor.getColumnIndex(sig_manager.START));
-        ending_date = cursor.getString(cursor.getColumnIndex(sig_manager.END));
-        color = cursor.getString(cursor.getColumnIndex(sig_manager.COLOR));
+        course_name = cursor.getString(cursor.getColumnIndex(cursor_manager.SIGNATURE));
+        course_parent = course_name;
+        teacher = cursor.getString(cursor.getColumnIndex(cursor_manager.TEACHER_NAME));
+        initial_date = cursor.getString(cursor.getColumnIndex(cursor_manager.START));
+        ending_date = cursor.getString(cursor.getColumnIndex(cursor_manager.END));
+        color = cursor.getString(cursor.getColumnIndex(cursor_manager.COLOR));
     }
 
     @Override
