@@ -89,7 +89,6 @@
 
         <service android:name=".Services.CountDownService" />
         <service android:name=".Services.CourseService" />
-        <service android:name=".Services.RestartService" />
 
         <receiver
             android:name=".Notifications.AlarmCourses"

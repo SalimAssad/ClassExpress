@@ -46,8 +46,6 @@ public class DB_Homework_Manager {
     public void insert(String xid_class, String xtitle, String xdescription, String xday_limit, String xhour_limit, int xpriority){
         try {
             db.insert(TABLE, null, generateContentValues(xid_class, xtitle, xdescription, xday_limit, xhour_limit, xpriority));
-
-            Fragment_home.serviceManager.updateCountDownServiceData();
         }catch (SQLException e){
             Log.d("Exception:", e.toString());
         }
@@ -60,7 +58,6 @@ public class DB_Homework_Manager {
 
             new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateTag(targetTitle, new_title);
             new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateTag(targetTitle, new_title);
-            Fragment_home.serviceManager.updateCountDownServiceData();
         }catch (SQLException e){
             Log.d("Exception:",e.toString());
         }
@@ -93,10 +90,9 @@ public class DB_Homework_Manager {
 
         new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByTag(targetName);
         new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByTag(targetName);
-        Fragment_home.serviceManager.updateCountDownServiceData();
     }
 
-    public void deleteBySignature(String targetName){
+    public void deleteByCourse(String targetName){
         Cursor cursor = searchBySignature(targetName);
         DB_Notifications_Manager notifications_manager = new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
         DB_Calendar_Notifications_Manager calendar_notifications = new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -106,7 +102,6 @@ public class DB_Homework_Manager {
             notifications_manager.deleteByTag(cursor.getString(cursor.getColumnIndex(TITLE)));
             calendar_notifications.deleteByTag(cursor.getString(cursor.getColumnIndex(TITLE)));
         }
-        Fragment_home.serviceManager.updateCountDownServiceData();
     }
 
     public Cursor searchBySignature(String targetName){

@@ -39,8 +39,6 @@ public class DB_Exams_Manager {
     public void insert(String xid_class, String xroom, String xday_limit, String xhour_limit){
         try {
             db.insert(TABLE, null, generateContentValues(xid_class, xroom, xday_limit, xhour_limit));
-
-            Fragment_home.serviceManager.updateCountDownServiceData();
         }catch (SQLException e){
             Log.d("Exception:", e.toString());
         }
@@ -50,8 +48,6 @@ public class DB_Exams_Manager {
         try {
             db.update(TABLE, generateContentValues(newSignature, new_room, new_day_limit, new_time_limit),
                     DAY_LIMIT + "= ? AND " + TIME_LIMIT + "=?", new String[]{targetDay, targetTime});
-
-            Fragment_home.serviceManager.updateCountDownServiceData();
         }catch (SQLException e){
             Log.d("Exception:",e.toString());
         }
@@ -78,17 +74,13 @@ public class DB_Exams_Manager {
 
     public void delete(String targetDay, String targetTime){
         db.delete(TABLE, DAY_LIMIT + "= ? AND " + TIME_LIMIT + "=?", new String[]{targetDay, targetTime});
-
-        Fragment_home.serviceManager.updateCountDownServiceData();
     }
 
-    public void deleteBySignature(String targetName){
-        db.delete(TABLE, COURSE +"=?", new String[]{targetName});
-
-        Fragment_home.serviceManager.updateCountDownServiceData();
+    public void deleteByCourse(String targetName){
+        db.delete(TABLE, COURSE + "=?", new String[]{targetName});
     }
 
-    public Cursor searchBySignature(String targetName){
+    public Cursor searchByCourse(String targetName){
         return db.query(TABLE,new String[]{COURSE, ROOM, DAY_LIMIT, TIME_LIMIT}, COURSE +"=?",
                 new String[]{targetName},null,null,null);
     }
