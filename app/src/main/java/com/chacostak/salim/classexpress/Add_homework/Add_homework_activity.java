@@ -2,8 +2,6 @@ package com.chacostak.salim.classexpress.Add_homework;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.chacostak.salim.classexpress.R;
 
@@ -22,7 +20,7 @@ public class Add_homework_activity extends ActionBarActivity {
             arguments.putString(Fragment_add_homework.DESCRIPTION, getIntent().getStringExtra(Fragment_add_homework.DESCRIPTION));
             arguments.putString(Fragment_add_homework.DAY_LIMIT, getIntent().getStringExtra(Fragment_add_homework.DAY_LIMIT));
             arguments.putString(Fragment_add_homework.TIME_LIMIT, getIntent().getStringExtra(Fragment_add_homework.TIME_LIMIT));
-            arguments.putString(Fragment_add_homework.SIGNATURE_NAME, getIntent().getStringExtra(Fragment_add_homework.SIGNATURE_NAME));
+            arguments.putString(Fragment_add_homework.COURSE_NAME, getIntent().getStringExtra(Fragment_add_homework.COURSE_NAME));
             frag.setArguments(arguments);
         }
 

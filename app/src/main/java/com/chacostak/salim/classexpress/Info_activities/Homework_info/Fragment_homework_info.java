@@ -32,7 +32,7 @@ public class Fragment_homework_info extends Fragment {
     String description;
     String day_limit;
     String time_limit;
-    String signature_name;
+    String course_name;
 
     boolean wasEdited = false;
 
@@ -86,15 +86,17 @@ public class Fragment_homework_info extends Fragment {
         if(!description.equals(""))
             textDescription.setText(description);
         textDayLimit.setText(day_limit + " - " + time_limit);
-        textSignature.setText(signature_name);
+        textSignature.setText(course_name);
     }
 
     private void setColors() {
-        Cursor signature = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(signature_name);
-        signature.moveToNext();
-        String color = signature.getString(0);
+        Cursor course = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(course_name);
+        course.moveToNext();
+        String color = course.getString(0);
         textTitle.setBackgroundColor(Color.parseColor(color));
         textDayLimit.setBackgroundColor(Color.parseColor(color));
+
+        course.close();
     }
 
     private void initializeAtributtes() {
@@ -102,6 +104,6 @@ public class Fragment_homework_info extends Fragment {
         description = cursor.getString(cursor.getColumnIndex(hw_manager.DESCRIPTION));
         day_limit = cursor.getString(cursor.getColumnIndex(hw_manager.DAY_LIMIT));
         time_limit = cursor.getString(cursor.getColumnIndex(hw_manager.TIME_LIMIT));
-        signature_name = cursor.getString(cursor.getColumnIndex(hw_manager.COURSE));
+        course_name = cursor.getString(cursor.getColumnIndex(hw_manager.COURSE));
     }
 }

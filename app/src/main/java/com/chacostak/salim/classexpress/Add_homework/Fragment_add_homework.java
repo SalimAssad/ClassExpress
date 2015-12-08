@@ -2,11 +2,11 @@ package com.chacostak.salim.classexpress.Add_homework;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,18 +56,19 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
     String newTimeLimit;
     int newPriority;
 
-    public static final String SIGNATURE_NAME = "COURSE_NAME";
+    public static final String COURSE_NAME = "COURSE_NAME";
     public static final String TITLE = "EMAIL";
     public static final String DESCRIPTION = "WEB_PAGE";
     public static final String DAY_LIMIT = "PHONE";
     public static final String TIME_LIMIT = "TIME_LIMIT";
+    public static final String REMOVE = "REMOVE";
 
     DB_Homework_Manager hw_manager;
 
     boolean isBeingEdited = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_add_homework, container, false);
 
         hw_manager = new DB_Homework_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -79,9 +80,9 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
 
         setListeners();
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             isBeingEdited = true;
-            oldSignature = getArguments().getString(SIGNATURE_NAME);
+            oldSignature = getArguments().getString(COURSE_NAME);
             oldTitle = getArguments().getString(TITLE);
             oldDescription = getArguments().getString(DESCRIPTION);
             oldDayLimit = getArguments().getString(DAY_LIMIT);
@@ -99,14 +100,14 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
 
             day_limit_picker = new DatePickerDialog(getActivity(), this, Integer.parseInt(day_limit_array[2]), dateValidation.getMonthInt(day_limit_array[1]), Integer.parseInt(day_limit_array[0]));
             hour_limit_picker = new TimePickerDialog(getActivity(), this, dateValidation.pmToNormalTime(Integer.parseInt(time_limit_array[0]), time_limit_array[1].split(" ")[1]), Integer.parseInt(time_limit_array[1].split(" ")[0]), false);
-        }else{
+        } else {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
             int hour = 15;
 
-            editDayLimit.setText(day+"/"+dateValidation.getMonthName(month)+"/"+year);
+            editDayLimit.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
             editTimeLimit.setText("3:00 pm");
 
             day_limit_picker = new DatePickerDialog(getActivity(), this, year, month, day);
@@ -121,7 +122,7 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1);
 
         Cursor cursor = sig_manager.getAll();
-        while(cursor.moveToNext())
+        while (cursor.moveToNext())
             adapter.add(cursor.getString(cursor.getColumnIndex(sig_manager.SIGNATURE)));
 
         spin_signature = (Spinner) v.findViewById(R.id.spin_signature);
@@ -158,7 +159,7 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
                 hour_limit_picker.show();
                 break;
             case R.id.save_button:
-                if(!isBeingEdited && !validate())
+                if (!isBeingEdited && !validate())
                     return;
 
                 newTitle = editTitle.getText().toString();
@@ -170,15 +171,14 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
 
                 storeData();
 
-                if(getArguments() != null){
-                    Intent output = new Intent();
-                    output.putExtra(TITLE, newTitle);
-                    output.putExtra(DESCRIPTION, newDescription);
-                    output.putExtra(DAY_LIMIT, newDayLimit);
-                    output.putExtra(TIME_LIMIT, newTimeLimit);
-                    output.putExtra(SIGNATURE_NAME, newSignature);
-                    getActivity().setResult(Activity.RESULT_OK, output);
-                }
+                Intent output = new Intent();
+                output.putExtra(TITLE, newTitle);
+                output.putExtra(DESCRIPTION, newDescription);
+                output.putExtra(DAY_LIMIT, newDayLimit);
+                output.putExtra(TIME_LIMIT, newTimeLimit);
+                output.putExtra(COURSE_NAME, newSignature);
+                output.putExtra(REMOVE, false);
+                getActivity().setResult(Activity.RESULT_OK, output);
                 getActivity().finish();
                 break;
             case R.id.cancel_button:
@@ -189,15 +189,15 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-        if(editDayLimit.isFocused())
-            editDayLimit.setText(i3+"/"+dateValidation.getMonthName(i2)+"/"+i);
+        if (editDayLimit.isFocused())
+            editDayLimit.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
     }
 
     @Override
     public void onFocusChange(View view, boolean b) {
-        if(!b)
+        if (!b)
             return;
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.edit_day_limit:
                 day_limit_picker.show();
                 break;
@@ -207,39 +207,39 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
         }
     }
 
-    private boolean validate(){
-        if(!validateInputs()) {
+    private boolean validate() {
+        if (!validateInputs()) {
             Toast.makeText(getActivity(), R.string.required_fields_empty, Toast.LENGTH_LONG).show();
             return false;
-        }else if(alreadyExists()) {
-            Toast.makeText(getActivity(),R.string.course_exists,Toast.LENGTH_LONG).show();
+        } else if (alreadyExists()) {
+            Toast.makeText(getActivity(), R.string.course_exists, Toast.LENGTH_LONG).show();
             return false;
-        }else
+        } else
             return true;
     }
 
-    private boolean alreadyExists(){
+    private boolean alreadyExists() {
         String title = editTitle.getText().toString();
         Cursor cursor;
         cursor = hw_manager.searchByTitle(title);
-        if(cursor.moveToNext())
+        if (cursor.moveToNext())
             return true;
         else
             return false;
     }
 
-    private boolean validateInputs(){
+    private boolean validateInputs() {
         Validate validate = new Validate();
-        if(validate.isEmpty(editTitle.getText().toString()))
+        if (validate.isEmpty(editTitle.getText().toString()))
             return false;
-        else if(validate.isEmpty(editDayLimit.getText().toString()))
+        else if (validate.isEmpty(editDayLimit.getText().toString()))
             return false;
         else
             return true;
     }
 
-    private void storeData(){
-        if(isBeingEdited)
+    private void storeData() {
+        if (isBeingEdited)
             hw_manager.update(oldTitle, newSignature, newTitle, newDescription, newDayLimit, newTimeLimit, newPriority);
         else
             hw_manager.insert(newSignature, newTitle, newDescription, newDayLimit, newTimeLimit, newPriority);
@@ -247,22 +247,22 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i2) {
-        if(!timePicker.isShown())
+        if (!timePicker.isShown())
             return;
 
         String minutes = String.valueOf(i2);
         String extra;
-        if(minutes.length() == 1)
-            minutes = "0"+minutes;
+        if (minutes.length() == 1)
+            minutes = "0" + minutes;
 
         extra = getExtra(i);
 
-        if(editTimeLimit.isFocused())
+        if (editTimeLimit.isFocused())
             editTimeLimit.setText(dateValidation.getPmTime(i) + ":" + minutes + " " + extra);
     }
 
     private String getExtra(int hourOfDay) {
-        if(hourOfDay >= 12)
+        if (hourOfDay >= 12)
             return "pm";
         else
             return "am";

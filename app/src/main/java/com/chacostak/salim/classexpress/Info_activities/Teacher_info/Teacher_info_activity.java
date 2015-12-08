@@ -1,5 +1,6 @@
 package com.chacostak.salim.classexpress.Info_activities.Teacher_info;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.chacostak.salim.classexpress.Add_homework.Fragment_add_homework;
 import com.chacostak.salim.classexpress.Add_teacher.Add_teacher_activity;
 import com.chacostak.salim.classexpress.Add_teacher.Fragment_add_teacher;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
@@ -104,6 +106,7 @@ public class Teacher_info_activity extends ActionBarActivity implements DialogIn
 
     private void delete() {
         new DB_Teacher_Manager(this, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByName(frag.name);
+        prepareResult(true);
         finish();
     }
 
@@ -133,5 +136,21 @@ public class Teacher_info_activity extends ActionBarActivity implements DialogIn
     public void onClick(DialogInterface dialog, int which) {
         if(which == -1)
             delete();
+    }
+
+    @Override
+    public void onBackPressed() {
+        prepareResult(false);
+        super.onBackPressed();
+    }
+
+    private void prepareResult(boolean removeFlag){
+        Intent output = new Intent();
+        output.putExtra(Fragment_add_teacher.NAME, frag.name);
+        output.putExtra(Fragment_add_teacher.PHONE, frag.phone);
+        output.putExtra(Fragment_add_teacher.EMAIL, frag.email);
+        output.putExtra(Fragment_add_teacher.WEB_PAGE, frag.web_page);
+        output.putExtra(Fragment_add_teacher.REMOVE, removeFlag);
+        setResult(Activity.RESULT_OK, output);
     }
 }

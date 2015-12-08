@@ -22,7 +22,7 @@ import com.chacostak.salim.classexpress.R;
 public class Fragment_exam_info extends Fragment {
 
     View v;
-    TextView textSignature, textRoom, textDayLimit;
+    TextView textCourse, textRoom, textDayLimit;
 
     Cursor cursor;
     DB_Exams_Manager exams_manager;
@@ -30,7 +30,7 @@ public class Fragment_exam_info extends Fragment {
     String room;
     String day_limit;
     String time_limit;
-    String signature_name;
+    String course_name;
 
     boolean wasEdited = false;
 
@@ -70,10 +70,10 @@ public class Fragment_exam_info extends Fragment {
     }
 
     private void setColor() {
-        Cursor cursor = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(signature_name);
+        Cursor cursor = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(course_name);
         cursor.moveToNext();
         String color = cursor.getString(0);
-        textSignature.setBackgroundColor(Color.parseColor(color));
+        textCourse.setBackgroundColor(Color.parseColor(color));
         textDayLimit.setBackgroundColor(Color.parseColor(color));
     }
 
@@ -87,17 +87,17 @@ public class Fragment_exam_info extends Fragment {
     public void initializeTexts() {
         textRoom = (TextView) v.findViewById(R.id.showRoom);
         textDayLimit = (TextView) v.findViewById(R.id.showDayLimit);
-        textSignature = (TextView) v.findViewById(R.id.showSignature);
+        textCourse = (TextView) v.findViewById(R.id.showSignature);
 
         textRoom.setText(getString(R.string.room) + " " + room);
         textDayLimit.setText(day_limit + " - " + time_limit);
-        textSignature.setText(getString(R.string.exam) + " - " +signature_name);
+        textCourse.setText(getString(R.string.exam) + " - " + course_name);
     }
 
     private void initializeAtributtes() {
         room = cursor.getString(cursor.getColumnIndex(exams_manager.ROOM));
         day_limit = cursor.getString(cursor.getColumnIndex(exams_manager.DAY_LIMIT));
         time_limit = cursor.getString(cursor.getColumnIndex(exams_manager.TIME_LIMIT));
-        signature_name = cursor.getString(cursor.getColumnIndex(exams_manager.COURSE));
+        course_name = cursor.getString(cursor.getColumnIndex(exams_manager.COURSE));
     }
 }

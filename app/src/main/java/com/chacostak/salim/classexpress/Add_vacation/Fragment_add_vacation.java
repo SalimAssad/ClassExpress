@@ -47,6 +47,7 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
     public static final String INITIAL_DATE = "INITIAL_DATE";
     public static final String ENDING_DATE = "ENDING_DATE";
     public static final String YEARLY = "YEARLY";
+    public static final String REMOVE = "REMOVE";
 
     //OLD VALUES IF IT IS BEING EDITED
     String oldTitle;
@@ -65,8 +66,8 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
     boolean isBeingEdited = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        v = inflater.inflate(R.layout.fragment_add_vacation,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.fragment_add_vacation, container, false);
 
         vac_manager = new DB_Vacations_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
@@ -84,7 +85,7 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
         dateValidation = new DateValidation(getActivity());
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             isBeingEdited = true;
             oldTitle = getArguments().getString(TITLE);
             oldBegins = getArguments().getString(INITIAL_DATE);
@@ -99,14 +100,14 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
             String begins_array[] = editBegins.getText().toString().split("/");
             String ends_array[] = editEnds.getText().toString().split("/");
 
-            if(oldYearly) {
+            if (oldYearly) {
                 begins = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), dateValidation.getMonthInt(begins_array[1]), Integer.parseInt(begins_array[0]));
                 ends = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), dateValidation.getMonthInt(ends_array[1]), Integer.parseInt(ends_array[0]));
-            }else{
+            } else {
                 begins = new DatePickerDialog(getActivity(), this, Integer.parseInt(begins_array[2]), dateValidation.getMonthInt(begins_array[1]), Integer.parseInt(begins_array[0]));
                 ends = new DatePickerDialog(getActivity(), this, Integer.parseInt(ends_array[2]), dateValidation.getMonthInt(ends_array[1]), Integer.parseInt(ends_array[0]));
             }
-        }else {
+        } else {
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
@@ -114,10 +115,10 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
             begins = new DatePickerDialog(getActivity(), this, year, month, day);
             ends = new DatePickerDialog(getActivity(), this, year, month, day);
 
-            if(oldYearly) {
+            if (oldYearly) {
                 oldBegins = day + "/" + dateValidation.getMonthName(month);
                 oldEnds = day + "/" + dateValidation.getMonthName(month);
-            }else{
+            } else {
                 oldBegins = day + "/" + dateValidation.getMonthName(month) + "/" + year;
                 oldEnds = day + "/" + dateValidation.getMonthName(month) + "/" + year;
             }
@@ -149,7 +150,7 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
                 ends.show();
                 break;
             case R.id.save_button:
-                if(!isBeingEdited && !validate())
+                if (!isBeingEdited && !validate())
                     return;
 
                 newTitle = editTitle.getText().toString();
@@ -159,14 +160,13 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
                 storeData();
 
-                if(getArguments() != null){
-                    Intent output = new Intent();
-                    output.putExtra(Fragment_add_vacation.TITLE, newTitle);
-                    output.putExtra(Fragment_add_vacation.INITIAL_DATE, newBegins);
-                    output.putExtra(Fragment_add_vacation.ENDING_DATE, newEnds);
-                    output.putExtra(Fragment_add_vacation.YEARLY, newYearly);
-                    getActivity().setResult(Activity.RESULT_OK, output);
-                }
+                Intent output = new Intent();
+                output.putExtra(TITLE, newTitle);
+                output.putExtra(INITIAL_DATE, newBegins);
+                output.putExtra(ENDING_DATE, newEnds);
+                output.putExtra(YEARLY, newYearly);
+                output.putExtra(REMOVE, false);
+                getActivity().setResult(Activity.RESULT_OK, output);
                 getActivity().finish();
                 break;
             case R.id.cancel_button:
@@ -182,29 +182,29 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        if(!datePicker.isShown())
+        if (!datePicker.isShown())
             return;
 
-        if(oldYearly) {
+        if (oldYearly) {
             setEditDates(month, day);
             adjustEdits(month, day);
-        }else {
+        } else {
             setEditDates(year, month, day);
             adjustEdits(year, month, day);
         }
     }
 
     private void setEditDates(int year, int month, int day) {
-        if(editBegins.isFocused())
+        if (editBegins.isFocused())
             editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
-        else if(editEnds.isFocused())
+        else if (editEnds.isFocused())
             editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
     }
 
     private void setEditDates(int month, int day) {
-        if(editBegins.isFocused())
+        if (editBegins.isFocused())
             editBegins.setText(day + "/" + dateValidation.getMonthName(month));
-        else if(editEnds.isFocused())
+        else if (editEnds.isFocused())
             editEnds.setText(day + "/" + dateValidation.getMonthName(month));
     }
 
@@ -213,10 +213,10 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
         String ending = editEnds.getText().toString();
 
         if (dateValidation.isAfter(start, ending)) {
-            if(editBegins.isFocused()) {
+            if (editBegins.isFocused()) {
                 editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
                 ends.updateDate(year, month, day);
-            }else{
+            } else {
                 editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
                 begins.updateDate(year, month, day);
             }
@@ -237,10 +237,10 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
         date2.set(calendar.get(Calendar.YEAR), dateValidation.getMonthInt(arr2[1]), Integer.parseInt(arr2[0]));
 
         if (date1.after(date2)) {
-            if(editBegins.isFocused()) {
+            if (editBegins.isFocused()) {
                 editEnds.setText(day + "/" + dateValidation.getMonthName(month));
                 ends.updateDate(calendar.get(Calendar.YEAR), month, day);
-            }else{
+            } else {
                 editBegins.setText(day + "/" + dateValidation.getMonthName(month));
                 begins.updateDate(calendar.get(Calendar.YEAR), month, day);
             }
@@ -248,62 +248,61 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
     }
 
 
-
     @Override
     public void onFocusChange(View view, boolean b) {
-        if(!b)
+        if (!b)
             return;
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.edit_begins:
                 begins.show();
-            break;
+                break;
             case R.id.edit_ends:
                 ends.show();
-            break;
+                break;
         }
     }
 
-    private boolean validate(){
-        if(!validateInputs()) {
-            Toast.makeText(getActivity(),R.string.required_fields_empty,Toast.LENGTH_LONG).show();
+    private boolean validate() {
+        if (!validateInputs()) {
+            Toast.makeText(getActivity(), R.string.required_fields_empty, Toast.LENGTH_LONG).show();
             return false;
-        }else if(alreadyExists()) {
-            Toast.makeText(getActivity(),R.string.vacation_exists,Toast.LENGTH_LONG).show();
+        } else if (alreadyExists()) {
+            Toast.makeText(getActivity(), R.string.vacation_exists, Toast.LENGTH_LONG).show();
             return false;
-        }else
+        } else
             return true;
     }
 
-    private boolean alreadyExists(){
+    private boolean alreadyExists() {
         String xtitle = editTitle.getText().toString();
         Cursor cursor;
         cursor = vac_manager.searchByTitle(xtitle);
-        if(cursor.moveToNext())
+        if (cursor.moveToNext())
             return true;
         else
             return false;
     }
 
-    private boolean validateInputs(){
+    private boolean validateInputs() {
         Validate validate = new Validate();
-        if(validate.isEmpty(editTitle.getText().toString()))
+        if (validate.isEmpty(editTitle.getText().toString()))
             return false;
-        else if(validate.isEmpty(editBegins.getText().toString()))
+        else if (validate.isEmpty(editBegins.getText().toString()))
             return false;
-        else if(validate.isEmpty(editEnds.getText().toString()))
+        else if (validate.isEmpty(editEnds.getText().toString()))
             return false;
         else
             return true;
     }
 
-    private void storeData(){
+    private void storeData() {
         int xyearly;
-        if(newYearly)
+        if (newYearly)
             xyearly = 1;
         else
             xyearly = 0;
 
-        if(isBeingEdited)
+        if (isBeingEdited)
             vac_manager.update(oldTitle, newTitle, newBegins, newEnds, xyearly);
         else
             vac_manager.insert(newTitle, newBegins, newEnds, xyearly);
@@ -316,7 +315,7 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
         String date2[] = oldEnds.split("/");
         oldBegins = date1[0] + "/" + date1[1];
         oldEnds = date2[0] + "/" + date2[1];
-        if(!isChecked){
+        if (!isChecked) {
             int year = calendar.get(Calendar.YEAR);
             oldBegins += "/" + year;
             oldEnds += "/" + year;

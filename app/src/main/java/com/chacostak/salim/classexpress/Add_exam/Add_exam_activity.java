@@ -19,7 +19,7 @@ public class Add_exam_activity extends ActionBarActivity {
             arguments.putString(Fragment_add_exam.ROOM, getIntent().getStringExtra(Fragment_add_exam.ROOM));
             arguments.putString(Fragment_add_exam.DAY_LIMIT, getIntent().getStringExtra(Fragment_add_exam.DAY_LIMIT));
             arguments.putString(Fragment_add_exam.TIME_LIMIT, getIntent().getStringExtra(Fragment_add_exam.TIME_LIMIT));
-            arguments.putString(Fragment_add_exam.SIGNATURE_NAME, getIntent().getStringExtra(Fragment_add_exam.SIGNATURE_NAME));
+            arguments.putString(Fragment_add_exam.COURSE_NAME, getIntent().getStringExtra(Fragment_add_exam.COURSE_NAME));
             frag.setArguments(arguments);
         }
 

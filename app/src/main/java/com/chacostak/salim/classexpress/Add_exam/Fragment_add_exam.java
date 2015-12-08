@@ -43,29 +43,30 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
     Spinner spin_signature;
 
     //OLD VALUES IF IT IS BEING EDITED
-    String oldSignature;
+    String oldCourse;
     String oldRoom;
     String oldDayLimit;
     String oldTimeLimit;
 
     //NEW VALUES
-    String newSignature;
+    String newCourse;
     String newRoom;
     String newDayLimit;
     String newTimeLimit;
 
-    public static final String SIGNATURE_NAME = "COURSE_NAME";
+    public static final String COURSE_NAME = "COURSE_NAME";
     public static final String NAME = "NAME";
     public static final String ROOM = "ROOM";
     public static final String DAY_LIMIT = "DAY_LIMIT";
     public static final String TIME_LIMIT = "TIME_LIMIT";
+    public static final String REMOVE = "REMOVE";
 
     DB_Exams_Manager exams_manager;
 
     boolean isBeingEdited = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_add_exam, container, false);
 
         exams_manager = new DB_Exams_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -77,9 +78,9 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
 
         setListeners();
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             isBeingEdited = true;
-            oldSignature = getArguments().getString(SIGNATURE_NAME);
+            oldCourse = getArguments().getString(COURSE_NAME);
             oldRoom = getArguments().getString(ROOM);
             oldDayLimit = getArguments().getString(DAY_LIMIT);
             oldTimeLimit = getArguments().getString(TIME_LIMIT);
@@ -87,21 +88,21 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
             editRoom.setText(oldRoom);
             editDayLimit.setText(oldDayLimit);
             editTimeLimit.setText(oldTimeLimit);
-            spin_signature.setSelection(((ArrayAdapter) spin_signature.getAdapter()).getPosition(oldSignature));
+            spin_signature.setSelection(((ArrayAdapter) spin_signature.getAdapter()).getPosition(oldCourse));
 
             String day_limit_array[] = editDayLimit.getText().toString().split("/");
             String time_limit_array[] = editTimeLimit.getText().toString().split(":");
 
             day_limit_picker = new DatePickerDialog(getActivity(), this, Integer.parseInt(day_limit_array[2]), dateValidation.getMonthInt(day_limit_array[1]), Integer.parseInt(day_limit_array[0]));
             hour_limit_picker = new TimePickerDialog(getActivity(), this, dateValidation.pmToNormalTime(Integer.parseInt(time_limit_array[0]), time_limit_array[1].split(" ")[1]), Integer.parseInt(time_limit_array[1].split(" ")[0]), false);
-        }else{
+        } else {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
             int hour = 15;
 
-            editDayLimit.setText(day+"/"+dateValidation.getMonthName(month)+"/"+year);
+            editDayLimit.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
             editTimeLimit.setText("3:00 pm");
 
             day_limit_picker = new DatePickerDialog(getActivity(), this, year, month, day);
@@ -116,7 +117,7 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1);
 
         Cursor cursor = sig_manager.getAll();
-        while(cursor.moveToNext())
+        while (cursor.moveToNext())
             adapter.add(cursor.getString(cursor.getColumnIndex(sig_manager.SIGNATURE)));
 
         spin_signature = (Spinner) v.findViewById(R.id.spin_signature);
@@ -152,24 +153,23 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
                 hour_limit_picker.show();
                 break;
             case R.id.save_button:
-                if(!isBeingEdited && !validate())
+                if (!isBeingEdited && !validate())
                     return;
 
                 newRoom = editRoom.getText().toString();
                 newDayLimit = editDayLimit.getText().toString();
                 newTimeLimit = editTimeLimit.getText().toString();
-                newSignature = String.valueOf(spin_signature.getSelectedItem());
+                newCourse = String.valueOf(spin_signature.getSelectedItem());
 
                 storeData();
 
-                if(getArguments() != null){
-                    Intent output = new Intent();
-                    output.putExtra(ROOM, newRoom);
-                    output.putExtra(DAY_LIMIT, newDayLimit);
-                    output.putExtra(TIME_LIMIT, newTimeLimit);
-                    output.putExtra(SIGNATURE_NAME, newSignature);
-                    getActivity().setResult(Activity.RESULT_OK, output);
-                }
+                Intent output = new Intent();
+                output.putExtra(ROOM, newRoom);
+                output.putExtra(DAY_LIMIT, newDayLimit);
+                output.putExtra(TIME_LIMIT, newTimeLimit);
+                output.putExtra(COURSE_NAME, newCourse);
+                output.putExtra(REMOVE, false);
+                getActivity().setResult(Activity.RESULT_OK, output);
                 getActivity().finish();
                 break;
             case R.id.cancel_button:
@@ -180,15 +180,15 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-        if(editDayLimit.isFocused())
-            editDayLimit.setText(i3+"/"+dateValidation.getMonthName(i2)+"/"+i);
+        if (editDayLimit.isFocused())
+            editDayLimit.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
     }
 
     @Override
     public void onFocusChange(View view, boolean b) {
-        if(!b)
+        if (!b)
             return;
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.edit_day_limit:
                 day_limit_picker.show();
                 break;
@@ -198,59 +198,59 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
         }
     }
 
-    private boolean validate(){
-        if(!validateInputs()) {
+    private boolean validate() {
+        if (!validateInputs()) {
             Toast.makeText(getActivity(), R.string.required_fields_empty, Toast.LENGTH_LONG).show();
             return false;
-        }else if(alreadyExists()) {
-            Toast.makeText(getActivity(),R.string.course_exists,Toast.LENGTH_LONG).show();
+        } else if (alreadyExists()) {
+            Toast.makeText(getActivity(), R.string.course_exists, Toast.LENGTH_LONG).show();
             return false;
-        }else
+        } else
             return true;
     }
 
-    private boolean alreadyExists(){
+    private boolean alreadyExists() {
         Cursor cursor;
         cursor = exams_manager.search(editDayLimit.getText().toString(), editTimeLimit.getText().toString());
-        if(cursor.moveToNext())
+        if (cursor.moveToNext())
             return true;
         else
             return false;
     }
 
-    private boolean validateInputs(){
+    private boolean validateInputs() {
         Validate validate = new Validate();
-        if(validate.isEmpty(editDayLimit.getText().toString()))
+        if (validate.isEmpty(editDayLimit.getText().toString()))
             return false;
         else
             return true;
     }
 
-    private void storeData(){
-        if(isBeingEdited)
-            exams_manager.update(oldDayLimit, oldTimeLimit, newSignature, newRoom, newDayLimit, newTimeLimit);
+    private void storeData() {
+        if (isBeingEdited)
+            exams_manager.update(oldDayLimit, oldTimeLimit, newCourse, newRoom, newDayLimit, newTimeLimit);
         else
-            exams_manager.insert(newSignature, newRoom, newDayLimit, newTimeLimit);
+            exams_manager.insert(newCourse, newRoom, newDayLimit, newTimeLimit);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i2) {
-        if(!timePicker.isShown())
+        if (!timePicker.isShown())
             return;
 
         String minutes = String.valueOf(i2);
         String extra;
-        if(minutes.length() == 1)
-            minutes = "0"+minutes;
+        if (minutes.length() == 1)
+            minutes = "0" + minutes;
 
         extra = getExtra(i);
 
-        if(editTimeLimit.isFocused())
+        if (editTimeLimit.isFocused())
             editTimeLimit.setText(dateValidation.getPmTime(i) + ":" + minutes + " " + extra);
     }
 
     private String getExtra(int hourOfDay) {
-        if(hourOfDay >= 12)
+        if (hourOfDay >= 12)
             return "pm";
         else
             return "am";

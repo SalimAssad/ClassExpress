@@ -1,5 +1,6 @@
 package com.chacostak.salim.classexpress.Info_activities.Homework_info;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -88,7 +89,7 @@ public class Homework_info_activity extends ActionBarActivity implements DialogI
                 intent.putExtra(Fragment_add_homework.DESCRIPTION, frag.description);
                 intent.putExtra(Fragment_add_homework.DAY_LIMIT, frag.day_limit);
                 intent.putExtra(Fragment_add_homework.TIME_LIMIT, frag.time_limit);
-                intent.putExtra(Fragment_add_homework.SIGNATURE_NAME, frag.signature_name);
+                intent.putExtra(Fragment_add_homework.COURSE_NAME, frag.course_name);
                 startActivityForResult(intent, DATA_SAVED);
                 return true;
             case R.id.delete:
@@ -105,6 +106,7 @@ public class Homework_info_activity extends ActionBarActivity implements DialogI
 
     private void delete() {
         new DB_Homework_Manager(this, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByTitle(frag.title);
+        prepareResult(true);
         finish();
     }
 
@@ -114,13 +116,13 @@ public class Homework_info_activity extends ActionBarActivity implements DialogI
             case DATA_SAVED:
                 // Make sure the request was successful
                 if (resultCode == RESULT_OK) {  //Gets the info that has been edited
-                    frag.signature_name = data.getStringExtra(Fragment_add_homework.SIGNATURE_NAME);
+                    frag.course_name = data.getStringExtra(Fragment_add_homework.COURSE_NAME);
                     frag.title = data.getStringExtra(Fragment_add_homework.TITLE);
                     frag.description = data.getStringExtra(Fragment_add_homework.DESCRIPTION);
                     frag.day_limit = data.getStringExtra(Fragment_add_homework.DAY_LIMIT);
                     frag.time_limit = data.getStringExtra(Fragment_add_homework.TIME_LIMIT);
 
-                    frag.textSignature.setText(frag.signature_name);
+                    frag.textSignature.setText(frag.course_name);
                     frag.textTitle.setText(frag.title);
                     frag.textDescription.setText(frag.description);
                     frag.textDayLimit.setText(frag.day_limit + " - " + frag.time_limit);
@@ -135,5 +137,22 @@ public class Homework_info_activity extends ActionBarActivity implements DialogI
     public void onClick(DialogInterface dialog, int which) {
         if(which == -1)
             delete();
+    }
+
+    @Override
+    public void onBackPressed() {
+        prepareResult(false);
+        super.onBackPressed();
+    }
+
+    private void prepareResult(boolean removeFlag){
+        Intent output = new Intent();
+        output.putExtra(Fragment_add_homework.TITLE, frag.title);
+        output.putExtra(Fragment_add_homework.COURSE_NAME, frag.course_name);
+        output.putExtra(Fragment_add_homework.DESCRIPTION, frag.description);
+        output.putExtra(Fragment_add_homework.DAY_LIMIT, frag.day_limit);
+        output.putExtra(Fragment_add_homework.TIME_LIMIT, frag.time_limit);
+        output.putExtra(Fragment_add_homework.REMOVE, removeFlag);
+        setResult(Activity.RESULT_OK, output);
     }
 }

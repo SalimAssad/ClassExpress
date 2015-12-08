@@ -1,5 +1,6 @@
 package com.chacostak.salim.classexpress.Info_activities.Vacation_info;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -104,6 +105,7 @@ public class Vacation_info_activity extends ActionBarActivity implements DialogI
 
     private void delete() {
         new DB_Vacations_Manager(this, DB_Helper.DB_Name, DB_Helper.DB_Version).delete(frag.title);
+        prepareResult(true);
         finish();
     }
 
@@ -132,5 +134,20 @@ public class Vacation_info_activity extends ActionBarActivity implements DialogI
     public void onClick(DialogInterface dialog, int which) {
         if(which == -1)
             delete();
+    }
+
+    @Override
+    public void onBackPressed() {
+        prepareResult(false);
+        super.onBackPressed();
+    }
+
+    private void prepareResult(boolean removeFlag){
+        Intent output = new Intent();
+        output.putExtra(Fragment_add_vacation.TITLE, frag.title);
+        output.putExtra(Fragment_add_vacation.INITIAL_DATE, frag.begin_date);
+        output.putExtra(Fragment_add_vacation.ENDING_DATE, frag.end_date);
+        output.putExtra(Fragment_add_vacation.REMOVE, removeFlag);
+        setResult(Activity.RESULT_OK, output);
     }
 }

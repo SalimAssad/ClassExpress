@@ -1,5 +1,6 @@
 package com.chacostak.salim.classexpress.Info_activities.Exam_info;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -89,7 +90,7 @@ public class Exam_info_activity extends ActionBarActivity implements DialogInter
                 intent.putExtra(Fragment_add_exam.ROOM, frag.room);
                 intent.putExtra(Fragment_add_exam.DAY_LIMIT, frag.day_limit);
                 intent.putExtra(Fragment_add_exam.TIME_LIMIT, frag.time_limit);
-                intent.putExtra(Fragment_add_exam.SIGNATURE_NAME, frag.signature_name);
+                intent.putExtra(Fragment_add_exam.COURSE_NAME, frag.course_name);
                 startActivityForResult(intent, DATA_SAVED);
                 return true;
             case R.id.delete:
@@ -106,6 +107,7 @@ public class Exam_info_activity extends ActionBarActivity implements DialogInter
 
     private void delete() {
         new DB_Exams_Manager(this, DB_Helper.DB_Name, DB_Helper.DB_Version).delete(frag.day_limit, frag.time_limit);
+        prepareResult(true);
         finish();
     }
 
@@ -115,12 +117,12 @@ public class Exam_info_activity extends ActionBarActivity implements DialogInter
             case DATA_SAVED:
                 // Make sure the request was successful
                 if (resultCode == RESULT_OK) {  //Gets the info that has been edited
-                    frag.signature_name = data.getStringExtra(Fragment_add_exam.SIGNATURE_NAME);
+                    frag.course_name = data.getStringExtra(Fragment_add_exam.COURSE_NAME);
                     frag.room = data.getStringExtra(Fragment_add_exam.ROOM);
                     frag.day_limit = data.getStringExtra(Fragment_add_exam.DAY_LIMIT);
                     frag.time_limit = data.getStringExtra(Fragment_add_exam.TIME_LIMIT);
 
-                    frag.textSignature.setText(getString(R.string.exam) + " - " + frag.signature_name);
+                    frag.textCourse.setText(getString(R.string.exam) + " - " + frag.course_name);
                     frag.textRoom.setText(getString(R.string.room) + " " + frag.room);
                     frag.textDayLimit.setText(frag.day_limit + " - " + frag.time_limit);
 
@@ -134,5 +136,20 @@ public class Exam_info_activity extends ActionBarActivity implements DialogInter
     public void onClick(DialogInterface dialog, int which) {
         if(which == -1) //If positive button
             delete();
+    }
+
+    @Override
+    public void onBackPressed() {
+        prepareResult(false);
+        super.onBackPressed();
+    }
+
+    private void prepareResult(boolean removeFlag){
+        Intent output = new Intent();
+        output.putExtra(Fragment_add_exam.COURSE_NAME, frag.course_name);
+        output.putExtra(Fragment_add_exam.DAY_LIMIT, frag.day_limit);
+        output.putExtra(Fragment_add_exam.TIME_LIMIT, frag.time_limit);
+        output.putExtra(Fragment_add_exam.REMOVE, removeFlag);
+        setResult(Activity.RESULT_OK, output);
     }
 }

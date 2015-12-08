@@ -44,13 +44,14 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
     public static final String EMAIL = "EMAIL";
     public static final String WEB_PAGE = "WEB_PAGE";
     public static final String PHONE = "PHONE";
+    public static final String REMOVE = "REMOVE";
 
     DB_Teacher_Manager teacher_manager;
 
     boolean isBeingEdited = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_add_teacher, container, false);
 
         teacher_manager = new DB_Teacher_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -59,7 +60,7 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
 
         setListeners();
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             isBeingEdited = true;
             oldName = getArguments().getString(NAME);
             oldEmail = getArguments().getString(EMAIL);
@@ -91,7 +92,7 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.save_button:
-                if(!isBeingEdited && !validate())
+                if (!isBeingEdited && !validate())
                     return;
 
                 newEmail = editEmail.getText().toString();
@@ -101,14 +102,13 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
 
                 storeData();
 
-                if(getArguments() != null){
-                    Intent output = new Intent();
-                    output.putExtra(EMAIL, newEmail);
-                    output.putExtra(WEB_PAGE, newWebPage);
-                    output.putExtra(PHONE, newPhone);
-                    output.putExtra(NAME, newName);
-                    getActivity().setResult(Activity.RESULT_OK, output);
-                }
+                Intent output = new Intent();
+                output.putExtra(EMAIL, newEmail);
+                output.putExtra(WEB_PAGE, newWebPage);
+                output.putExtra(PHONE, newPhone);
+                output.putExtra(NAME, newName);
+                output.putExtra(REMOVE, false);
+                getActivity().setResult(Activity.RESULT_OK, output);
                 getActivity().finish();
                 break;
             case R.id.cancel_button:
@@ -117,37 +117,37 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
         }
     }
 
-    private boolean validate(){
-        if(!validateInputs()) {
+    private boolean validate() {
+        if (!validateInputs()) {
             Toast.makeText(getActivity(), R.string.required_fields_empty, Toast.LENGTH_LONG).show();
             return false;
-        }else if(alreadyExists()) {
-            Toast.makeText(getActivity(),R.string.course_exists,Toast.LENGTH_LONG).show();
+        } else if (alreadyExists()) {
+            Toast.makeText(getActivity(), R.string.course_exists, Toast.LENGTH_LONG).show();
             return false;
-        }else
+        } else
             return true;
     }
 
-    private boolean alreadyExists(){
+    private boolean alreadyExists() {
         String name = editName.getText().toString();
         Cursor cursor;
         cursor = teacher_manager.searchByName(name);
-        if(cursor.moveToNext())
+        if (cursor.moveToNext())
             return true;
         else
             return false;
     }
 
-    private boolean validateInputs(){
+    private boolean validateInputs() {
         Validate validate = new Validate();
-        if(validate.isEmpty(editName.getText().toString()))
+        if (validate.isEmpty(editName.getText().toString()))
             return false;
         else
             return true;
     }
 
-    private void storeData(){
-        if(isBeingEdited)
+    private void storeData() {
+        if (isBeingEdited)
             teacher_manager.update(oldName, newName, newEmail, newWebPage, newPhone);
         else
             teacher_manager.insert(newName, newEmail, newWebPage, newPhone);
