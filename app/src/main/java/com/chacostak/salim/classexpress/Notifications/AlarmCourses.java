@@ -3,6 +3,7 @@ package com.chacostak.salim.classexpress.Notifications;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -59,7 +60,7 @@ public class AlarmCourses extends WakefulBroadcastReceiver {
         String initial_time = intent.getStringExtra(INITIAL_TIME);
         int alarm = intent.getIntExtra(ALARM, 0);
 
-        if (course != null) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notifications_courses", true) && course != null) {
             Cursor cursor = courses_manager.searchByName(course);
             cursor.moveToNext();
             if (courseValidation.stillInCourse(activity, cursor.getString(cursor.getColumnIndex(courses_manager.START)), cursor.getString(cursor.getColumnIndex(courses_manager.END)))) {
@@ -76,6 +77,9 @@ public class AlarmCourses extends WakefulBroadcastReceiver {
 
         if (nextAlarm == 0) { //If it is equals to 0 then there are no more alarms for that signature
             nextAlarm = getFirstAlarm();
+            if(nextAlarm == 0) //If there are no stored alarms for the courses, it returns without setting an alarm
+                return;
+
             data = getNextCourseData(nextAlarm);
         } else {
             data = getCourseData(lastCourse, last_initial_time); //If this line executes, you already have the data needed

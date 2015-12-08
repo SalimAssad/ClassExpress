@@ -97,7 +97,7 @@ public class DB_Courses_Manager {
     public void deleteCourse(String sigTarget){
         db.delete(TABLE, SIGNATURE + "=?", new String[]{sigTarget});
         new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteBySignature(sigTarget);
-        new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteBySignature(sigTarget);
+        new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByCourse(sigTarget);
         new DB_Exams_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteBySignature(sigTarget);
 
         String day_name = new DateValidation(activity).getDayName(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));

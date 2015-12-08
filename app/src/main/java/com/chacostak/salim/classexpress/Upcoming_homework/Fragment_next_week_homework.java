@@ -29,7 +29,7 @@ public class Fragment_next_week_homework extends Fragment{
     View v;
 
     DB_Homework_Manager homework_manager;
-    DB_Courses_Manager sig_manager;
+    DB_Courses_Manager course_manager;
 
     Calendar calendar;
     DateValidation dateValidation;
@@ -48,47 +48,77 @@ public class Fragment_next_week_homework extends Fragment{
                 weekOfYear = getArguments().getInt(Fragment_home.DATE) + 1;
 
             homework_manager = new DB_Homework_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
-            sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+            course_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
             calendar = Calendar.getInstance();
             dateValidation = new DateValidation(getActivity());
 
-            Cursor homework = homework_manager.getAll();
-            Cursor cursor_signature;
-            String storedTitle;
-            String storedDescription;
-            String storedDate;
-            String storedTimeLimit;
-            String storedSignature;
-            String storedColor;
-            int hw_week_of_year;
-            long remainingTime;
-            while(homework.moveToNext()){
-                storedTitle = homework.getString(homework.getColumnIndex(homework_manager.TITLE));
-                storedDescription = homework.getString(homework.getColumnIndex(homework_manager.DESCRIPTION));
-                storedDate = homework.getString(homework.getColumnIndex(homework_manager.DAY_LIMIT));
-                storedTimeLimit = homework.getString(homework.getColumnIndex(homework_manager.TIME_LIMIT));
-                storedSignature = homework.getString(homework.getColumnIndex(homework_manager.COURSE));
-
-                cursor_signature = sig_manager.getCourseColor(storedSignature);
-                cursor_signature.moveToNext();
-                storedColor = cursor_signature.getString(0);
-
-                hw_week_of_year = dateValidation.getWeekOfYear(storedDate + " " + storedTimeLimit);
-
-                if(hw_week_of_year == weekOfYear) {
-                    if (calendar.before(dateValidation.formatDateANDTimeInPm(storedDate + " " + storedTimeLimit))) {
-                        remainingTime = dateValidation.getRemainingTime(dateValidation.formatDateANDTimeInPm(storedDate + " " + storedTimeLimit));
-                        events.add(new EventData(storedTitle, storedDescription, storedDate, storedTimeLimit, remainingTime, 'H', storedSignature, storedColor));
-                    }
-                }
-            }
-
-            events = sorter.bubbleSortRemainingTime(events);
-            addEvents();
+            //checkHomework();
         }
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkHomework();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeFragments();
+    }
+
+    private void removeFragments() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        for(int i = 0; i < events.size(); i++){
+            Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(i));
+            transaction.remove(fragment);
+        }
+        transaction.commit();
+        events.clear();
+    }
+
+    private void checkHomework() {
+        Cursor homework = homework_manager.getAll();
+        Cursor cursor_course;
+        String storedTitle;
+        String storedDescription;
+        String storedDate;
+        String storedTimeLimit;
+        String storedSignature;
+        String storedColor;
+        int hw_week_of_year;
+        long remainingTime;
+        while(homework.moveToNext()){
+            storedTitle = homework.getString(homework.getColumnIndex(homework_manager.TITLE));
+            storedDescription = homework.getString(homework.getColumnIndex(homework_manager.DESCRIPTION));
+            storedDate = homework.getString(homework.getColumnIndex(homework_manager.DAY_LIMIT));
+            storedTimeLimit = homework.getString(homework.getColumnIndex(homework_manager.TIME_LIMIT));
+            storedSignature = homework.getString(homework.getColumnIndex(homework_manager.COURSE));
+
+            cursor_course = course_manager.getCourseColor(storedSignature);
+            cursor_course.moveToNext();
+            storedColor = cursor_course.getString(0);
+
+            hw_week_of_year = dateValidation.getWeekOfYear(storedDate + " " + storedTimeLimit);
+
+            if(hw_week_of_year == weekOfYear) {
+                if (calendar.before(dateValidation.formatDateANDTimeInPm(storedDate + " " + storedTimeLimit))) {
+                    remainingTime = dateValidation.getRemainingTime(dateValidation.formatDateANDTimeInPm(storedDate + " " + storedTimeLimit));
+                    events.add(new EventData(storedTitle, storedDescription, storedDate, storedTimeLimit, remainingTime, 'H', storedSignature, storedColor));
+                }
+            }
+
+            cursor_course.close();
+        }
+
+        homework.close();
+
+        events = sorter.bubbleSortRemainingTime(events);
+        addEvents();
     }
 
     public void addEvents() {
@@ -106,7 +136,7 @@ public class Fragment_next_week_homework extends Fragment{
                 arguments.putBoolean(Fragment_home.ACTIVATE_TIMER, false);
                 arguments.putBoolean(Fragment_this_week_homework.THIS_WEEK, false);
                 frag.setArguments(arguments);
-                getFragmentManager().beginTransaction().add(R.id.event_container, frag)
+                getFragmentManager().beginTransaction().add(R.id.event_container, frag, String.valueOf(i))
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             }
             /*

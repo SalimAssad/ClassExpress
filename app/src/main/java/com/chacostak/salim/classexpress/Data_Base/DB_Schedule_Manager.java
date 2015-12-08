@@ -122,23 +122,23 @@ public class DB_Schedule_Manager {
         return content;
     }
 
-    private ContentValues generateContentValues(String xsignature){
+    private ContentValues generateContentValues(String xcourse){
         ContentValues content = new ContentValues();
-        content.put(COURSE, xsignature);
+        content.put(COURSE, xcourse);
         return content;
     }
 
-    public void deleteBySignature(String targetSig){
+    public void deleteByCourse(String targetSig){
         db.delete(TABLE, COURSE + "=?", new String[]{targetSig});
+
+        resetAlarms();
     }
 
     public void delete(String targetName, String day, int classroom, String xstart, String xend){
         db.delete(TABLE, COURSE +"=? AND "+DAY_OF_WEEK+"=? AND "+ CLASSROOM +"=? AND "+START+"=? AND "+END+"=?",
                 new String[]{targetName, day, String.valueOf(classroom), xstart, xend});
 
-        String day_name = new DateValidation(activity).getDayName(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
-        if(day.equals(day_name)) //Validates if an update to the service is necesary
-            Fragment_home.serviceManager.updateSignatureServiceData(day_name);
+        resetAlarms();
     }
 
     public Cursor searchBySignature(String targetName){
