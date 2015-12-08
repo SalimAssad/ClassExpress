@@ -18,7 +18,6 @@ import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
 import com.chacostak.salim.classexpress.Data_Base.DB_Schedule_Manager;
 import com.chacostak.salim.classexpress.Day_courses.Day_courses_activity;
 import com.chacostak.salim.classexpress.Notifications.AlarmHandler;
-import com.chacostak.salim.classexpress.Services.ServiceManager;
 import com.chacostak.salim.classexpress.Upcoming_events.Fragment_upcoming_exam;
 import com.chacostak.salim.classexpress.Upcoming_events.Fragment_upcoming_homework;
 import com.chacostak.salim.classexpress.Upcoming_events.Fragment_upcoming_course;
@@ -43,8 +42,6 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
     public static DB_Schedule_Manager sch_manager;
     public static DB_Homework_Manager homework_manager;
     public static DB_Exams_Manager exams_manager;
-
-    public static ServiceManager serviceManager;
 
     TextView textSigToday, textThisWeek, textNextWeek;
 
@@ -78,9 +75,6 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_home, container, false);
-
-        if (serviceManager == null)
-            serviceManager = new ServiceManager(getActivity());
 
         if (alarmHandler == null)
             alarmHandler = new AlarmHandler();
