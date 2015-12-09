@@ -17,9 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by Salim on 12/04/2015.
  */
-public class Day_signature_adapter extends ArrayAdapter {
+public class Day_course_adapter extends ArrayAdapter {
 
-    public Day_signature_adapter(Context context, int resource, ArrayList<EventData> data) {
+    public Day_course_adapter(Context context, int resource, ArrayList<EventData> data) {
         super(context, resource, data);
     }
 

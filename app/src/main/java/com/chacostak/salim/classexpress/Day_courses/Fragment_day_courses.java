@@ -27,10 +27,10 @@ import java.util.Calendar;
 /**
  * Created by Salim on 12/04/2015.
  */
-public class Fragment_day_signatures extends Fragment implements AdapterView.OnItemClickListener, View.OnTouchListener {
+public class Fragment_day_courses extends Fragment implements AdapterView.OnItemClickListener, View.OnTouchListener {
 
     View v;
-    Day_signature_adapter adapter;
+    Day_course_adapter adapter;
     ListView list;
     ViewFlipper flipper;
 
@@ -53,7 +53,7 @@ public class Fragment_day_signatures extends Fragment implements AdapterView.OnI
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        v = inflater.inflate(R.layout.fragment_day_signature, container, false);
+        v = inflater.inflate(R.layout.fragment_day_course, container, false);
 
         if(getArguments() != null) {
             dayName = getArguments().getString(Fragment_home.DATE);
@@ -106,7 +106,7 @@ public class Fragment_day_signatures extends Fragment implements AdapterView.OnI
         }
         cursor.close();
         data = sort.bubbleSortRemainingTime(data);
-        adapter = new Day_signature_adapter(getActivity(),R.layout.day_sig_listview, data);
+        adapter = new Day_course_adapter(getActivity(),R.layout.day_sig_listview, data);
     }
 
 
@@ -135,7 +135,7 @@ public class Fragment_day_signatures extends Fragment implements AdapterView.OnI
         }
         cursor.close();
         data = sort.bubbleSortRemainingTime(data);
-        adapter = new Day_signature_adapter(getActivity(),R.layout.day_sig_listview, data);
+        adapter = new Day_course_adapter(getActivity(),R.layout.day_sig_listview, data);
     }
 
     private void prepareListview() {

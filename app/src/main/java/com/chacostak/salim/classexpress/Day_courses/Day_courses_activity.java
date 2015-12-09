@@ -10,7 +10,7 @@ import com.chacostak.salim.classexpress.Utilities.ADmob;
 
 public class Day_courses_activity extends ActionBarActivity {
 
-    Fragment_day_signatures frag = new Fragment_day_signatures();
+    Fragment_day_courses frag = new Fragment_day_courses();
 
     ADmob ads;
 

@@ -2,13 +2,9 @@
 <resources>
 
     <string name="app_name">Class Express</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
-    <string name="add_course">ADD COURSE</string>
-    <string name="add_homework">ADD HOMEWORK</string>
-    <string name="add_teacher">ADD TEACHER</string>
     <string name="delete">Delete</string>
 
     <string name="notifications">Notifications</string>
@@ -202,7 +198,7 @@
         <item>Fri</item>
         <item>Sat</item>
     </string-array>
-    <string name="title_activity_calendar_activity">Calendar_activity</string>
+    <string name="title_activity_calendar_activity">Calendar (BETA)</string>
     <string name="notification_exists">Error - The same notification already exists...</string>
 
 </resources>
