@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 
 import com.chacostak.salim.classexpress.Calendar.Calendar_activity;
 import com.chacostak.salim.classexpress.Calendar.ClassExpressCalendar;
+import com.chacostak.salim.classexpress.Calendar.Day_info.Day_info_activity;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,8 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
     boolean openedFromCalendarActivity = false;
 
+    boolean firstRun = true, secondRun = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
@@ -48,16 +51,15 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
             calendar = new ClassExpressCalendar(getActivity(), v);
             selectedYear = calendar.getRealYear();
-            selectedMonth = calendar.getRealMonth();
+            selectedMonth = calendar.getRealMonthAbbreviation();
             positive = selectedYear + 1;
             negative = selectedYear - 1;
-            calendar.loadEvents(selectedMonth);
             calendar.loadCalendar(calendar.getShowedMonthInt(), selectedYear);
 
             spinnerMonths = (Spinner) v.findViewById(R.id.spinner_months);
             adapterMonths = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, getActivity().getResources().getStringArray(R.array.complete_months));
             spinnerMonths.setAdapter(adapterMonths);
-            spinnerMonths.setSelection(calendar.getMonthInt(calendar.getRealMonth()));
+            spinnerMonths.setSelection(calendar.getMonthInt(calendar.getRealMonthAbbreviation()));
             spinnerMonths.setOnItemSelectedListener(this);
 
             spinnerYears = (Spinner) v.findViewById(R.id.spinner_years);
@@ -89,18 +91,30 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()){
-            case R.id.spinner_months:
-                selectedMonth = (String) spinnerMonths.getItemAtPosition(position);
-                break;
-            case R.id.spinner_years:
-                selectedYear = (int) spinnerYears.getItemAtPosition(position);
-                break;
-        }
+    public void onDestroyView() {
+        if(calendar != null)
+            calendar.closeDatabases(); //If not closed, might leak connections
+        super.onDestroyView();
+    }
 
-        calendar.loadEvents(selectedMonth);
-        calendar.loadCalendar(calendar.getMonthInt(selectedMonth), selectedYear);
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(firstRun)
+            firstRun = false;
+        else if(secondRun)
+            secondRun = false;
+        else {
+            switch (parent.getId()) {
+                case R.id.spinner_months:
+                    selectedMonth = (String) spinnerMonths.getItemAtPosition(position);
+                    selectedMonth = calendar.getAbrevMonthName(selectedMonth);
+                    break;
+                case R.id.spinner_years:
+                    selectedYear = (int) spinnerYears.getItemAtPosition(position);
+                    break;
+            }
+            calendar.loadCalendar(calendar.getMonthInt(selectedMonth), selectedYear);
+        }
     }
 
     @Override
@@ -132,6 +146,37 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (openedFromCalendarActivity)
             calendarActivityEvents(position);
+        else{
+            openDayInfoActivity(position);
+        }
+    }
+
+    private void openDayInfoActivity(int position) {
+        if (position > 6) {
+            String date;
+            int day = getDay(position);
+            int month = getShowedMonthInt();
+            int year = getShowedYear();
+            if (position < 13 && day > 7) {
+                if (month == 0) {
+                    month = 11;
+                    year--;
+                } else
+                    month--;
+            } else if (position > 25 && day < 7) {
+                if (month == 11) {
+                    month = 0;
+                    year++;
+                } else
+                    month++;
+            }
+
+            date = String.valueOf(day) + "/" + getAbrevMonthName(month) + "/" + String.valueOf(year);
+
+            Intent intent = new Intent(getActivity(), Day_info_activity.class);
+            intent.putExtra(Day_info_activity.DATE, date);
+            startActivity(intent);
+        }
     }
 
     private void calendarActivityEvents(int position) {

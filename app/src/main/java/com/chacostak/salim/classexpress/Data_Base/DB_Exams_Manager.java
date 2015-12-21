@@ -94,7 +94,21 @@ public class DB_Exams_Manager {
         return db.query(TABLE,new String[]{COURSE, ROOM,DAY_LIMIT, TIME_LIMIT},null,null,null,null,null);
     }
 
-    public Cursor getAllDateAndTime(){
-        return db.query(TABLE,new String[]{DAY_LIMIT, TIME_LIMIT},null,null,null,null,null);
+    public Cursor searchByMonth(String monthAbbreviation){
+        monthAbbreviation = "%"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " LIKE ?", new String[]{monthAbbreviation}, null, null, null);
+    }
+
+    public Cursor searchByDayOfMonth(int day, String monthAbbreviation){
+        String dayOfMonth = day+"/"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " LIKE ?", new String[]{dayOfMonth}, null, null, null);
+    }
+
+    public Cursor searchByDate(String date) {
+        return db.query(TABLE, new String[]{COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " = ?", new String[]{date}, null, null, null);
+    }
+
+    public void closeDatabase(){
+        db.close();
     }
 }

@@ -87,7 +87,7 @@ public class Fragment_exam_info extends Fragment {
     public void initializeTexts() {
         textRoom = (TextView) v.findViewById(R.id.showRoom);
         textDayLimit = (TextView) v.findViewById(R.id.showDayLimit);
-        textCourse = (TextView) v.findViewById(R.id.showSignature);
+        textCourse = (TextView) v.findViewById(R.id.textCourse);
 
         textRoom.setText(getString(R.string.room) + " " + room);
         textDayLimit.setText(day_limit + " - " + time_limit);

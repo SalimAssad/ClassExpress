@@ -102,7 +102,7 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
             int year = calendar.get(Calendar.YEAR);
             int hour = 15;
 
-            editDayLimit.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+            editDayLimit.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
             editTimeLimit.setText("3:00 pm");
 
             day_limit_picker = new DatePickerDialog(getActivity(), this, year, month, day);
@@ -181,7 +181,7 @@ public class Fragment_add_exam extends Fragment implements View.OnFocusChangeLis
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
         if (editDayLimit.isFocused())
-            editDayLimit.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
+            editDayLimit.setText(i3 + "/" + dateValidation.getMonthAbbreviation(i2) + "/" + i);
     }
 
     @Override

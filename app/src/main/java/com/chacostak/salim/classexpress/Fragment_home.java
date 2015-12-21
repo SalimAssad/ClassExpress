@@ -99,7 +99,7 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
 
             weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
 
-            monthName = dateValidation.getMonthName(month);
+            monthName = dateValidation.getMonthAbbreviation(month);
 
             setDayName();
 

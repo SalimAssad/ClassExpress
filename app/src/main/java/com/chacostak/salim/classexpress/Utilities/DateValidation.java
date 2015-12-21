@@ -1,7 +1,6 @@
 package com.chacostak.salim.classexpress.Utilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.chacostak.salim.classexpress.R;
 
@@ -48,7 +47,18 @@ public class DateValidation {
         return calendar;
     }
 
-    public String getMonthName(int i){
+    public Calendar formatDateNoYear(String date){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM", Locale.US);
+        try {
+            calendar.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calendar;
+    }
+
+    public String getMonthAbbreviation(int i){
         switch (i){
             case 0:
                 return activity.getString(R.string.jan);
@@ -240,7 +250,7 @@ public class DateValidation {
     public long getRemainingTime(String initial_time){
         Calendar ends;
         Calendar begins = Calendar.getInstance();
-        initial_time = begins.get(Calendar.DAY_OF_MONTH)+"/"+getMonthName(begins.get(Calendar.MONTH))+"/"+begins.get(Calendar.YEAR)+" "+initial_time;
+        initial_time = begins.get(Calendar.DAY_OF_MONTH)+"/"+ getMonthAbbreviation(begins.get(Calendar.MONTH))+"/"+begins.get(Calendar.YEAR)+" "+initial_time;
         ends = formatDateANDTimeInPm(initial_time);
 
         return ends.getTimeInMillis() - begins.getTimeInMillis();
@@ -315,7 +325,7 @@ public class DateValidation {
         }
     }
 
-    public String getMonthAbreviation(String xmonthName) {
+    public String getMonthAbbreviation(String xmonthName) {
         xmonthName = xmonthName.toLowerCase();
         return xmonthName.substring(0,3);
     }

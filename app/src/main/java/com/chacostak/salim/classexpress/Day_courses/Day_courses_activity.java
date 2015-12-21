@@ -17,7 +17,7 @@ public class Day_courses_activity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_day_signatures);
+        setContentView(R.layout.activity_day_courses);
 
         Thread thread = null;
 
