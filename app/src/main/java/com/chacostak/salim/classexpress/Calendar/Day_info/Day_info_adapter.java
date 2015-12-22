@@ -71,11 +71,15 @@ public class Day_info_adapter extends ArrayAdapter {
     private String getDate(Calendar cal) {
         String am_pm;
         final int AM_PM = cal.get(Calendar.AM_PM);
+        String minutes = String.valueOf(cal.get(Calendar.MINUTE));
         if(AM_PM == 0)
             am_pm = "am";
         else
             am_pm = "pm";
 
-        return cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) + " - " + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + " " + am_pm;
+        if(minutes.length() == 1)
+            minutes = "0"+minutes;
+
+        return cal.get(Calendar.HOUR) + ":" + minutes + " " + am_pm;
     }
 }

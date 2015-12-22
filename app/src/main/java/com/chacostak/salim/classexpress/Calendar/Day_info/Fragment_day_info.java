@@ -38,7 +38,8 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
 
     Cursor cursor;
 
-    ArrayList<CalendarData> data;
+    ArrayList<CalendarData> homeworkData;
+    ArrayList<CalendarData> examsData;
     Sorter sort = new Sorter();
 
     DateValidation dateValidation;
@@ -64,10 +65,14 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         vacations_manager = new DB_Vacations_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
-        data = new ArrayList<>();
+        homeworkData = new ArrayList<>();
+        examsData = new ArrayList<>();
 
-        prepareAdapter();
-        prepareListview();
+        prepareHomeworkAdapter();
+        prepareListHomework();
+
+        prepareExamsAdapter();
+        prepareListExams();
 
         getActivity().setTitle(date);
 
@@ -83,9 +88,9 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         super.onDestroyView();
     }
 
-    //Sets up the adapter reading the values from the data base
-    private void prepareAdapter() {
-        data.clear();
+    //Sets up the adapter reading the values from the homeworkData base
+    private void prepareHomeworkAdapter() {
+        homeworkData.clear();
 
         Cursor course_cursor;
         String course;
@@ -103,11 +108,29 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
             homeworkData.setInitialDate(cal);
             homeworkData.setCourse(course);
 
-            data.add(homeworkData);
+            this.homeworkData.add(homeworkData);
 
             course_cursor.close();
         }
         cursor.close();
+
+        homeworkData = sort.bubbleSortCalendarData(homeworkData);
+        adapter = new Day_info_adapter(getActivity(), R.layout.day_info_adapter, homeworkData);
+    }
+
+    private void prepareListHomework() {
+        list = (ListView) v.findViewById(R.id.listHomework);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(this);
+    }
+
+    //Sets up the adapter reading the values from the homeworkData base
+    private void prepareExamsAdapter() {
+        examsData.clear();
+
+        Cursor course_cursor;
+        String course;
 
         cursor = exams_manager.searchByDate(date);
         while (cursor.moveToNext()) {
@@ -122,19 +145,19 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
             examData.setInitialDate(cal);
             examData.setCourse(course);
 
-            data.add(examData);
+            examsData.add(examData);
 
             course_cursor.close();
         }
         cursor.close();
 
 
-        data = sort.bubbleSortCalendarData(data);
-        adapter = new Day_info_adapter(getActivity(), R.layout.day_info_adapter, data);
+        examsData = sort.bubbleSortCalendarData(examsData);
+        adapter = new Day_info_adapter(getActivity(), R.layout.day_info_adapter, examsData);
     }
 
-    private void prepareListview() {
-        list = (ListView) v.findViewById(R.id.listView);
+    private void prepareListExams() {
+        list = (ListView) v.findViewById(R.id.listExams);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(this);
