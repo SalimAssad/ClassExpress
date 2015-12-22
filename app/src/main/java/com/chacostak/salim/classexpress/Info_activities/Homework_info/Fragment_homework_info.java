@@ -80,7 +80,7 @@ public class Fragment_homework_info extends Fragment {
         textTitle = (TextView) v.findViewById(R.id.showTitle);
         textDescription = (TextView) v.findViewById(R.id.showDescription);
         textDayLimit = (TextView) v.findViewById(R.id.showDayLimit);
-        textSignature = (TextView) v.findViewById(R.id.showSignature);
+        textSignature = (TextView) v.findViewById(R.id.textCourse);
 
         textTitle.setText(title);
         if(!description.equals(""))

@@ -116,11 +116,11 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
             ends = new DatePickerDialog(getActivity(), this, year, month, day);
 
             if (oldYearly) {
-                oldBegins = day + "/" + dateValidation.getMonthName(month);
-                oldEnds = day + "/" + dateValidation.getMonthName(month);
+                oldBegins = day + "/" + dateValidation.getMonthAbbreviation(month);
+                oldEnds = day + "/" + dateValidation.getMonthAbbreviation(month);
             } else {
-                oldBegins = day + "/" + dateValidation.getMonthName(month) + "/" + year;
-                oldEnds = day + "/" + dateValidation.getMonthName(month) + "/" + year;
+                oldBegins = day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year;
+                oldEnds = day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year;
             }
 
             editBegins.setText(oldBegins);
@@ -196,16 +196,16 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
     private void setEditDates(int year, int month, int day) {
         if (editBegins.isFocused())
-            editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+            editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
         else if (editEnds.isFocused())
-            editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+            editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
     }
 
     private void setEditDates(int month, int day) {
         if (editBegins.isFocused())
-            editBegins.setText(day + "/" + dateValidation.getMonthName(month));
+            editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month));
         else if (editEnds.isFocused())
-            editEnds.setText(day + "/" + dateValidation.getMonthName(month));
+            editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month));
     }
 
     private void adjustEdits(int year, int month, int day) {
@@ -214,10 +214,10 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
         if (dateValidation.isAfter(start, ending)) {
             if (editBegins.isFocused()) {
-                editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 ends.updateDate(year, month, day);
             } else {
-                editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 begins.updateDate(year, month, day);
             }
         }
@@ -238,10 +238,10 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
 
         if (date1.after(date2)) {
             if (editBegins.isFocused()) {
-                editEnds.setText(day + "/" + dateValidation.getMonthName(month));
+                editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month));
                 ends.updateDate(calendar.get(Calendar.YEAR), month, day);
             } else {
-                editBegins.setText(day + "/" + dateValidation.getMonthName(month));
+                editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month));
                 begins.updateDate(calendar.get(Calendar.YEAR), month, day);
             }
         }

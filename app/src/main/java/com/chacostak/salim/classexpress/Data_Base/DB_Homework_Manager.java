@@ -7,8 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.chacostak.salim.classexpress.Fragment_home;
-
 /**
  * Created by Salim on 31/03/2015.
  */
@@ -93,10 +91,10 @@ public class DB_Homework_Manager {
     }
 
     public void deleteByCourse(String targetName){
-        Cursor cursor = searchBySignature(targetName);
+        Cursor cursor = searchByCourse(targetName);
         DB_Notifications_Manager notifications_manager = new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
         DB_Calendar_Notifications_Manager calendar_notifications = new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
-        db.delete(TABLE, COURSE +"=?", new String[]{targetName});
+        db.delete(TABLE, COURSE + "=?", new String[]{targetName});
 
         while(cursor.moveToNext()) {
             notifications_manager.deleteByTag(cursor.getString(cursor.getColumnIndex(TITLE)));
@@ -104,7 +102,7 @@ public class DB_Homework_Manager {
         }
     }
 
-    public Cursor searchBySignature(String targetName){
+    public Cursor searchByCourse(String targetName){
         return db.query(TABLE,new String[]{COURSE, TITLE, DESCRIPTION,DAY_LIMIT, TIME_LIMIT}, COURSE +"=?",
                 new String[]{targetName},null,null,null);
     }
@@ -120,5 +118,23 @@ public class DB_Homework_Manager {
 
     public Cursor getAllDate_Title_Time(){
         return db.query(TABLE,new String[]{TITLE,DAY_LIMIT, TIME_LIMIT},null,null,null,null,null);
+    }
+
+    public Cursor searchByMonth(String monthAbbreviation){
+        monthAbbreviation = "%"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{TITLE, COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " LIKE ?", new String[]{monthAbbreviation}, null, null, null);
+    }
+
+    public Cursor searchByDayOfMonth(int day, String monthAbbreviation){
+        String dayOfMonth = day+"/"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{TITLE, COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " LIKE ?", new String[]{dayOfMonth}, null, null, null);
+    }
+
+    public Cursor searchByDate(String date) {
+        return db.query(TABLE, new String[]{TITLE, DESCRIPTION, COURSE, DAY_LIMIT, TIME_LIMIT}, DAY_LIMIT + " = ?", new String[]{date}, null, null, null);
+    }
+
+    public void closeDatabase(){
+        db.close();
     }
 }

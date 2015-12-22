@@ -4,9 +4,10 @@ import android.content.Context;
 import android.view.View;
 import android.widget.GridView;
 
+import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
+import com.chacostak.salim.classexpress.Calendar.Data.VacationData;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Utilities.DateValidation;
-import com.chacostak.salim.classexpress.Utilities.EventData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +15,7 @@ import java.util.Calendar;
 /**
  * Created by Salim on 05/04/2015.
  */
-public class ChacoCalendar {
+public abstract class ChacoCalendar {
 
     Context context;
     GridView gridView;
@@ -22,7 +23,8 @@ public class ChacoCalendar {
     Calendar calendar;
     CalendarAdapter adapter;
 
-    ArrayList<EventData> data;
+    ArrayList<CalendarData> data;
+    ArrayList<VacationData> vacData;
 
     DateValidation dateValidation;
 
@@ -40,19 +42,24 @@ public class ChacoCalendar {
         gridView = (GridView) v.findViewById(R.id.calendarGridView);
         days = new ArrayList<>();
         data = new ArrayList<>();
+        vacData = new ArrayList<>();
         calendar = Calendar.getInstance();
 
         dateValidation = new DateValidation(xcontext);
 
         RdayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         Rmonth = calendar.get(Calendar.MONTH);
-        RmonthName = dateValidation.getMonthName(Rmonth);
+        RmonthName = dateValidation.getMonthAbbreviation(Rmonth);
         RlastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         Ryear = calendar.get(Calendar.YEAR);
+
+        showedMonth = Rmonth;
+        showedYear = Ryear;
     }
 
     private void calculateDays(int xmonth, int xyear) {
         int dayOfWeek;
+        days.clear();
         showedMonth = xmonth;
         showedYear = xyear;
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -71,11 +78,12 @@ public class ChacoCalendar {
 
     //Stores the previous days from the actual Rmonth
     public void storePreviousDays(int previousDays) {
-        for(int i = 0; i < (previousDays+7)-1; i++) //Creates the space
-            days.add(0);
+        int limit = previousDays+6;
+        for(int i = 0; i < limit; i++) //Creates the space
+            days.add(Integer.MAX_VALUE);
 
         Calendar copy = (Calendar) calendar.clone();
-        for (int i = (previousDays+7)-2; i >= 0; i--) { //Stores the days
+        for (int i = previousDays+5; i >= 6; i--) { //Stores the days
             copy.add(Calendar.DATE, -1);
             days.set(i, copy.get(Calendar.DAY_OF_MONTH));
         }
@@ -100,8 +108,8 @@ public class ChacoCalendar {
         }
     }
 
-    public String getRealMonth(){
-        return dateValidation.getMonthName(Rmonth);
+    public String getRealMonthAbbreviation(){
+        return dateValidation.getMonthAbbreviation(Rmonth);
     }
 
     public int getRealYear() {
@@ -129,7 +137,11 @@ public class ChacoCalendar {
     }
 
     public String getAbrevMonthName(int xmonth) {
-        return dateValidation.getMonthName(xmonth);
+        return dateValidation.getMonthAbbreviation(xmonth);
+    }
+
+    public String getAbrevMonthName(String xmonthName) {
+        return dateValidation.getMonthAbbreviation(xmonthName);
     }
 
     public int getPmTime(int hourOfDay) {
@@ -137,15 +149,16 @@ public class ChacoCalendar {
     }
 
     public void loadCalendar(int selectedMonth, int selectedYear) {
-        days.clear();
-        data.clear();
         calculateDays(selectedMonth, selectedYear);
+        loadEvents(selectedMonth);
 
-        adapter = new CalendarAdapter(context, R.layout.calendar_adapter, days, data, RdayOfMonth, Rmonth, Ryear, showedMonth, showedYear);
+        adapter = new CalendarAdapter(context, R.layout.calendar_adapter, days, data, vacData, RdayOfMonth, Rmonth, Ryear, showedMonth, showedYear);
         gridView.setAdapter(adapter);
     }
 
-    public int getMonthInt(String selectedMonth) {
-        return dateValidation.getMonthInt(dateValidation.getMonthAbreviation(selectedMonth));
+    abstract void loadEvents(int month);
+
+    public int getMonthInt(String monthAbbreviation) {
+        return dateValidation.getMonthInt(monthAbbreviation);
     }
 }

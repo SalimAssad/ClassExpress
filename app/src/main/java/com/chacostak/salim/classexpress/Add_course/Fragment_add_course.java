@@ -134,8 +134,8 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
                 auxYear++;
             }
 
-            editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
-            editEnds.setText(day + "/" + dateValidation.getMonthName(auxMonth) + "/" + auxYear);
+            editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
+            editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(auxMonth) + "/" + auxYear);
         }
 
         return v;
@@ -226,9 +226,9 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
             return;
 
         if (editBegins.isFocused())
-            editBegins.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
+            editBegins.setText(i3 + "/" + dateValidation.getMonthAbbreviation(i2) + "/" + i);
         else if (editEnds.isFocused())
-            editEnds.setText(i3 + "/" + dateValidation.getMonthName(i2) + "/" + i);
+            editEnds.setText(i3 + "/" + dateValidation.getMonthAbbreviation(i2) + "/" + i);
 
         adjustEdits(i, i2, i3);
     }
@@ -242,20 +242,20 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
                 if (month == 11) {
                     month = 1;
                     year += 1;
-                    editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                    editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 } else {
                     month += 1;
-                    editEnds.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                    editEnds.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 }
                 ends.updateDate(year, month, day);
             } else {
                 if (month == 0) {
                     month = 11;
                     year -= 1;
-                    editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                    editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 } else {
                     month -= 1;
-                    editBegins.setText(day + "/" + dateValidation.getMonthName(month) + "/" + year);
+                    editBegins.setText(day + "/" + dateValidation.getMonthAbbreviation(month) + "/" + year);
                 }
                 begins.updateDate(year, month, day);
             }

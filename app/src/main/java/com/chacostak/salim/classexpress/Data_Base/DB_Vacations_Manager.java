@@ -96,4 +96,18 @@ public class DB_Vacations_Manager {
     public Cursor getAll(){
         return db.query(TABLE,new String[]{ID, TITLE,START,END,YEARLY},null,null,null,null,null);
     }
+
+    public Cursor searchByMonth(String monthAbbreviation){
+        monthAbbreviation = "%"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{TITLE, START, END, YEARLY}, START + " LIKE ?", new String[]{monthAbbreviation}, null, null, null);
+    }
+
+    public Cursor searchByDayOfMonth(int day, String monthAbbreviation){
+        String dayOfMonth = day+"/"+monthAbbreviation+"%";
+        return db.query(TABLE, new String[]{TITLE, START, END, YEARLY}, START + " LIKE ?", new String[]{dayOfMonth}, null, null, null);
+    }
+
+    public void closeDatabase(){
+        db.close();
+    }
 }

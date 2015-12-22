@@ -200,5 +200,6 @@
     </string-array>
     <string name="title_activity_calendar_activity">Calendar (BETA)</string>
     <string name="notification_exists">Error - The same notification already exists...</string>
+    <string name="title_activity_day_info_activity">Day info</string>
 
 </resources>

@@ -120,7 +120,7 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
     }
 
     public void initializeTexts() {
-        textSignature = (TextView) v.findViewById(R.id.showSignature);
+        textSignature = (TextView) v.findViewById(R.id.textCourse);
         textTeacher = (TextView) v.findViewById(R.id.showTeacher);
         textDates = (TextView) v.findViewById(R.id.showDates);
 

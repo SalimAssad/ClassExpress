@@ -113,4 +113,8 @@ public class DB_Courses_Manager {
     public Cursor getTeacherAndColor(String storedSignature) {
         return db.query(TABLE,new String[]{TEACHER_NAME,COLOR}, SIGNATURE +"=?",new String[]{storedSignature},null,null,null);
     }
+
+    public void closeDatabase(){
+        db.close();
+    }
 }
