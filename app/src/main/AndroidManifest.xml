@@ -73,9 +73,6 @@
             android:name=".Calendar.Calendar_activity"
             android:label="@string/title_activity_calendar_activity" />
 
-        <service android:name=".Services.CountDownService" />
-        <service android:name=".Services.CourseService" />
-
         <receiver
             android:name=".Notifications.AlarmCourses"
             android:enabled="true"
