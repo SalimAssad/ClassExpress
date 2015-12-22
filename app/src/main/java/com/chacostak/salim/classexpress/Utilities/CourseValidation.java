@@ -25,7 +25,7 @@ public class CourseValidation {
             dateValidation = new DateValidation(xactivity);
 
         Cursor vac_cursor = vacations_manager.getAll();
-        if(calendar.after(addOneDay(ends)) && calendar.before(dateValidation.formatDate(starts)))
+        if(calendar.after(addOneDay(ends)) || calendar.before(dateValidation.formatDate(starts)))
             return false;
         else {
             String s;
