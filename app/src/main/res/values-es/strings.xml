@@ -202,5 +202,4 @@
     </string-array>
     <string name="title_activity_calendar_activity">Calendario (BETA)</string>
     <string name="notification_exists">Error - Ya existe una notificación igual...</string>
-
 </resources>

@@ -88,11 +88,15 @@ public class MainActivity extends ActionBarActivity
                 onSectionAttached(5);
                 break;
             case 6:
-                transaction.replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                isHomeAddedToBackStack = true;
-                onSectionAttached(6);
+                loadCalendarFragment();
                 break;
         }
+    }
+
+    private void loadCalendarFragment() {
+        getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        isHomeAddedToBackStack = true;
+        onSectionAttached(6);
     }
 
     public void onSectionAttached(int number) {
@@ -135,6 +139,7 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
+
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
@@ -157,9 +162,7 @@ public class MainActivity extends ActionBarActivity
 
                 return true;
             case R.id.action_calendar:
-                getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                isHomeAddedToBackStack = true;
-                onSectionAttached(6);
+                mNavigationDrawerFragment.selectItem(6);
                 return true;
         }
 

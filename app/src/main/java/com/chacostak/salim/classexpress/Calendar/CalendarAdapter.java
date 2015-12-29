@@ -70,7 +70,6 @@ public class CalendarAdapter extends ArrayAdapter {
             int day = (int) getItem(position);
             int month;
             boolean isFromOtherMonth = isFromOtherMonth(day, position);
-            boolean isToday = isToday(day);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height);
             RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.main_layout);
             v.setLayoutParams(new GridView.LayoutParams(params));
@@ -94,7 +93,7 @@ public class CalendarAdapter extends ArrayAdapter {
                 if(lastDayOfVacation(day))
                     vacData.remove(0);
             }
-            if(isToday)
+            if(isToday(day, month))
                 layout.setBackgroundColor(Color.parseColor("#4E00648D"));
 
             while(eventExistsToday(day, month)){
@@ -139,8 +138,8 @@ public class CalendarAdapter extends ArrayAdapter {
         }
     }
 
-    private boolean isToday(int day) {
-        if(day == realDay && realMonth == showedMonth && realYear == showedYear)
+    private boolean isToday(int day, int month) {
+        if(day == realDay && realMonth == month && realYear == showedYear)
             return true;
         else
             return false;
