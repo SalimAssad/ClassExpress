@@ -96,4 +96,8 @@ public class DB_Calendar_Notifications_Manager {
     public Cursor getAll(){
         return db.query(TABLE, new String[]{TAG, DATE, TIME, TYPE}, null, null, null, null, null);
     }
+
+    public void closeDatabase(){
+        db.close();
+    }
 }

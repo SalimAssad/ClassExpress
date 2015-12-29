@@ -1,6 +1,9 @@
 package com.chacostak.salim.classexpress;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +13,7 @@ import android.widget.ListView;
 
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Teacher_Manager;
+import com.chacostak.salim.classexpress.Utilities.Dialogs;
 import com.chacostak.salim.classexpress.Utilities.EventData;
 
 import java.util.ArrayList;
@@ -17,14 +21,13 @@ import java.util.ArrayList;
 /**
  * Created by Salim on 05/04/2015.
  */
-public class ActionTeach implements ActionMode.Callback {
+public class ActionTeach implements ActionMode.Callback, DialogInterface.OnClickListener {
 
     DB_Teacher_Manager teacher_manager;
 
     ActionMode action;
     ArrayList<EventData> selected = new ArrayList<>();
 
-    ListView list;
     CustomAdapter adapter;
 
     public ActionTeach(Context activity, CustomAdapter xadapter){
@@ -48,17 +51,26 @@ public class ActionTeach implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
         switch(menuItem.getItemId()) {
             case R.id.action_delete:
-                for(int i = 0; i < selected.size(); i++){
-                    adapter.remove(selected.get(i));
-                    teacher_manager.deleteByName(selected.get(i).name);
-                }
-                adapter.notifyDataSetChanged();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(adapter.getContext());
+                if(sharedPreferences.getBoolean("general_confirmations", true) && sharedPreferences.getBoolean("confirmation_teachers", true))
+                    new Dialogs(adapter.getContext()).createConfirmationDialog(R.string.delete, R.string.are_you_sure, R.drawable.ic_launcher, this);
+                else
+                    delete();
 
-                actionMode.finish();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private void delete() {
+        for(int i = 0; i < selected.size(); i++){
+            adapter.remove(selected.get(i));
+            teacher_manager.deleteByName(selected.get(i).name);
+        }
+        adapter.notifyDataSetChanged();
+
+        action.finish();
     }
 
     @Override
@@ -103,5 +115,15 @@ public class ActionTeach implements ActionMode.Callback {
         for(int i = 0; i < adapter.getCount(); i++)
             adapter.deSelect(i);
         selected.clear();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if(which == -1)
+            delete();
+    }
+
+    public void closeDatabase() {
+        teacher_manager.closeDatabase();
     }
 }

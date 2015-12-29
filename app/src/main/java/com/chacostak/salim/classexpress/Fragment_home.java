@@ -38,10 +38,10 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
 
     View v;
 
-    public static DB_Courses_Manager sig_manager;
-    public static DB_Schedule_Manager sch_manager;
-    public static DB_Homework_Manager homework_manager;
-    public static DB_Exams_Manager exams_manager;
+    DB_Courses_Manager course_manager;
+    DB_Schedule_Manager sch_manager;
+    DB_Homework_Manager homework_manager;
+    DB_Exams_Manager exams_manager;
 
     TextView textSigToday, textThisWeek, textNextWeek;
 
@@ -84,7 +84,7 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
         }
 
         if (savedInstanceState == null) {
-            sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+            course_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
             sch_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
             homework_manager = new DB_Homework_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
             exams_manager = new DB_Exams_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
@@ -111,6 +111,15 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
         }
 
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        course_manager.closeDatabase();
+        sch_manager.closeDatabase();
+        homework_manager.closeDatabase();
+        exams_manager.closeDatabase();
+        super.onDestroyView();
     }
 
     @Override
@@ -208,12 +217,12 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
                 storedEndingHour = schedule.getString(schedule.getColumnIndex(sch_manager.END));
                 remainingTime = dateValidation.getRemainingTime(storedInitialHour);
 
-                course = sig_manager.searchByName(storedCourse);
+                course = course_manager.searchByName(storedCourse);
                 course.moveToNext();
-                storedTeacher = course.getString(course.getColumnIndex(sig_manager.TEACHER_NAME));
-                storedColor = course.getString(course.getColumnIndex(sig_manager.COLOR));
+                storedTeacher = course.getString(course.getColumnIndex(course_manager.TEACHER_NAME));
+                storedColor = course.getString(course.getColumnIndex(course_manager.COLOR));
 
-                if (courseValidation.stillInCourse(getActivity(), course.getString(course.getColumnIndex(sig_manager.START)), course.getString(course.getColumnIndex(sig_manager.END)))) {
+                if (courseValidation.stillInCourse(getActivity(), course.getString(course.getColumnIndex(course_manager.START)), course.getString(course.getColumnIndex(course_manager.END)))) {
                     i++;
                     checkCourseRemainingTime(remainingTime, storedCourse, storedInitialHour, storedEndingHour, storedTeacher, storedColor);
                 }
@@ -250,7 +259,7 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
             storedTimeLimit = homework.getString(homework.getColumnIndex(homework_manager.TIME_LIMIT));
             storedCourse = homework.getString(homework.getColumnIndex(homework_manager.COURSE));
 
-            cursor_course = sig_manager.getCourseColor(storedCourse);
+            cursor_course = course_manager.getCourseColor(storedCourse);
             cursor_course.moveToNext();
             storedColor = cursor_course.getString(0);
 
@@ -294,7 +303,7 @@ public class Fragment_home extends Fragment implements View.OnClickListener {
             storedTimeLimit = exam.getString(exam.getColumnIndex(exams_manager.TIME_LIMIT));
             storedCourse = exam.getString(exam.getColumnIndex(exams_manager.COURSE));
 
-            cursor_course = sig_manager.getCourseColor(storedCourse);
+            cursor_course = course_manager.getCourseColor(storedCourse);
             cursor_course.moveToNext();
             storedColor = cursor_course.getString(0);
 

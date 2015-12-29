@@ -2,6 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     android:id="@+id/main_layout">
 
     <TextView
@@ -43,14 +47,15 @@
         android:layout_below="@+id/view"
         android:layout_alignRight="@+id/view"
         android:layout_alignEnd="@+id/view"
-        android:gravity="right" />
+        android:gravity="right"
+        android:paddingRight="5dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
-        android:id="@+id/textBottom"
+        android:id="@+id/textDate"
         android:padding="5dp"
         android:gravity="right"
         android:layout_below="@+id/textCourse"

@@ -49,7 +49,12 @@ public class DB_Teacher_Manager {
         try {
             db.update(TABLE, generateContentValues(new_name, new_email, new_web_page, new_phone),
                     NAME + "= ?", new String[]{targetName});
-            new DB_Courses_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateTeacher(targetName, new_name);
+
+            DB_Courses_Manager courses_manager = new DB_Courses_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+
+            courses_manager.updateTeacher(targetName, new_name);
+
+            courses_manager.closeDatabase();
         }catch (SQLException e){
             Log.d("Exception:",e.toString());
         }
@@ -65,7 +70,7 @@ public class DB_Teacher_Manager {
     }
 
     public void deleteByName(String targetName){
-        db.delete(TABLE, NAME +"=?", new String[]{targetName});
+        db.delete(TABLE, NAME + "=?", new String[]{targetName});
     }
 
     public void delete(String targetName, String day, int classroom, String xstart, String xend){
@@ -81,5 +86,9 @@ public class DB_Teacher_Manager {
 
     public Cursor getAll(){
         return db.query(TABLE,new String[]{NAME, EMAIL, WEB_PAGE, PHONE},null,null,null,null,null);
+    }
+
+    public void closeDatabase(){
+        db.close();
     }
 }

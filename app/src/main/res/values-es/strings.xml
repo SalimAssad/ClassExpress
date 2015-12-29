@@ -3,6 +3,7 @@
 
     <string name="app_name">Class Express</string>
     <string name="action_settings">Configuración</string>
+    <string name="action_calendar">Calendario</string>
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
     <string name="delete">Eliminar</string>
@@ -126,8 +127,9 @@
     <string name="web_page">Página web:</string>
     <string name="phone">Teléfono:</string>
 
-    <string name="room">Habitación:</string>
+    <string name="room">Salón:</string>
     <string name="exam">Examen</string>
+    <string name="exams">Exámenes</string>
 
     <string name="m">m</string>
     <string name="h">h</string>
@@ -190,13 +192,13 @@
     </string-array>
 
     <string-array name="abrev_days">
-        <item>Sun</item>
-        <item>Mon</item>
-        <item>Tue</item>
-        <item>Wed</item>
-        <item>Thu</item>
-        <item>Fri</item>
-        <item>Sat</item>
+        <item>Dom</item>
+        <item>Lun</item>
+        <item>Mar</item>
+        <item>Mie</item>
+        <item>Jue</item>
+        <item>Vie</item>
+        <item>Sab</item>
     </string-array>
     <string name="title_activity_calendar_activity">Calendario (BETA)</string>
     <string name="notification_exists">Error - Ya existe una notificación igual...</string>

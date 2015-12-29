@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Fragment_courses extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
 
     View v;
-    DB_Courses_Manager sig_manager;
+    DB_Courses_Manager courses_manager;
     Cursor cursor;
     CustomAdapter adapter;
     ArrayList<EventData> data;
@@ -39,9 +39,9 @@ public class Fragment_courses extends Fragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_signatures, container, false);
 
-        sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
-        cursor = sig_manager.getAll();
+        cursor = courses_manager.getAll();
 
         prepareAdapter();
         prepareListView();
@@ -49,6 +49,18 @@ public class Fragment_courses extends Fragment implements AdapterView.OnItemClic
         v.findViewById(R.id.add_button).setOnClickListener(this);
 
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        courses_manager.closeDatabase();
+
+        if(action_helper != null) {
+            action_helper.closeDatabase();
+            action_helper = null;
+        }
+
+        super.onDestroyView();
     }
 
     @Override
@@ -79,9 +91,9 @@ public class Fragment_courses extends Fragment implements AdapterView.OnItemClic
         data = new ArrayList<>();
         while (cursor.moveToNext()) {
             data.add(new EventData());
-            data.get(data.size() - 1).name = cursor.getString(cursor.getColumnIndex(sig_manager.SIGNATURE));
-            data.get(data.size() - 1).teacher = cursor.getString(cursor.getColumnIndex(sig_manager.TEACHER_NAME));
-            data.get(data.size() - 1).color = cursor.getString(cursor.getColumnIndex(sig_manager.COLOR));
+            data.get(data.size() - 1).name = cursor.getString(cursor.getColumnIndex(courses_manager.SIGNATURE));
+            data.get(data.size() - 1).teacher = cursor.getString(cursor.getColumnIndex(courses_manager.TEACHER_NAME));
+            data.get(data.size() - 1).color = cursor.getString(cursor.getColumnIndex(courses_manager.COLOR));
         }
 
         adapter = new CustomAdapter(getActivity(), R.layout.custom_list_view, data);

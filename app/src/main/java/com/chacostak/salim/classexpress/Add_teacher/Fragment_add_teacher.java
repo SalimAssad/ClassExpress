@@ -76,6 +76,12 @@ public class Fragment_add_teacher extends Fragment implements View.OnClickListen
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        teacher_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
     private void initializeEdits() {
         editWebPage = (EditText) v.findViewById(R.id.edit_web_page);
         editPhone = (EditText) v.findViewById(R.id.edit_phone);

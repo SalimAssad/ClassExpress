@@ -65,6 +65,19 @@ public class Fragment_exams extends Fragment implements View.OnClickListener, Ad
     }
 
     @Override
+    public void onDestroyView() {
+        exams_manager.closeDatabase();
+        course_manager.closeDatabase();
+
+        if(action_helper != null) {
+            action_helper.closeDatabase();
+            action_helper = null;
+        }
+
+        super.onDestroyView();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(action_helper.action != null)
             action_helper.select(i);

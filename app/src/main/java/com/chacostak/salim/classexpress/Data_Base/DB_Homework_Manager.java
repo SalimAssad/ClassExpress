@@ -54,14 +54,21 @@ public class DB_Homework_Manager {
             db.update(TABLE, generateContentValues(newSignature, new_title, new_description, new_day_limit, new_time_limit, new_priority),
                     TITLE + "= ?", new String[]{targetTitle});
 
-            new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateTag(targetTitle, new_title);
-            new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateTag(targetTitle, new_title);
+            DB_Notifications_Manager notifications_manager = new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+            DB_Calendar_Notifications_Manager calendar_notifications = new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+
+            notifications_manager.updateTag(targetTitle, new_title);
+            calendar_notifications.updateTag(targetTitle, new_title);
+
+            notifications_manager.closeDatabase();
+            calendar_notifications.closeDatabase();
+
         }catch (SQLException e){
             Log.d("Exception:",e.toString());
         }
     }
 
-    public void updateSignature(String targetSignature, String new_signature){
+    public void updateCourse(String targetSignature, String new_signature){
         db.update(TABLE, generateContentValues(new_signature),
                 COURSE + "= ?", new String[]{targetSignature});
     }
@@ -86,8 +93,14 @@ public class DB_Homework_Manager {
     public void deleteByTitle(String targetName){
         db.delete(TABLE, TITLE + "=?", new String[]{targetName});
 
-        new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByTag(targetName);
-        new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByTag(targetName);
+        DB_Notifications_Manager notifications_manager = new DB_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+        DB_Calendar_Notifications_Manager calendar_notifications = new DB_Calendar_Notifications_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+
+        notifications_manager.deleteByTag(targetName);
+        calendar_notifications.deleteByTag(targetName);
+
+        notifications_manager.closeDatabase();
+        calendar_notifications.closeDatabase();
     }
 
     public void deleteByCourse(String targetName){
@@ -100,6 +113,10 @@ public class DB_Homework_Manager {
             notifications_manager.deleteByTag(cursor.getString(cursor.getColumnIndex(TITLE)));
             calendar_notifications.deleteByTag(cursor.getString(cursor.getColumnIndex(TITLE)));
         }
+
+        cursor.close();
+        notifications_manager.closeDatabase();
+        calendar_notifications.closeDatabase();
     }
 
     public Cursor searchByCourse(String targetName){
@@ -114,10 +131,6 @@ public class DB_Homework_Manager {
 
     public Cursor getAll(){
         return db.query(TABLE,new String[]{COURSE, TITLE, DESCRIPTION,DAY_LIMIT, TIME_LIMIT, PRIORITY},null,null,null,null,null);
-    }
-
-    public Cursor getAllDate_Title_Time(){
-        return db.query(TABLE,new String[]{TITLE,DAY_LIMIT, TIME_LIMIT},null,null,null,null,null);
     }
 
     public Cursor searchByMonth(String monthAbbreviation){

@@ -7,11 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.chacostak.salim.classexpress.Fragment_home;
-import com.chacostak.salim.classexpress.Utilities.DateValidation;
-
-import java.util.Calendar;
-
 /**
  * Created by Salim on 25/01/2015.
  */
@@ -53,13 +48,22 @@ public class DB_Courses_Manager {
         db.insert(TABLE,null,generateContentValues(xsignature,xaverage,xstart,xend,xteacher_id,xcolor));
     }
 
-    public void update(String targetSignature, String new_signature, double new_average, String new_start, String new_end, String new_teacher_id, String xcolor){
+    public void update(String targetCourse, String new_course, double new_average, String new_start, String new_end, String new_teacher_id, String xcolor){
         try {
-            db.update(TABLE, generateContentValues(new_signature, new_average, new_start, new_end, new_teacher_id, xcolor),
-                    SIGNATURE + "= ?", new String[]{targetSignature});
-            new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateSignature(targetSignature, new_signature);
-            new DB_Exams_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateSignature(targetSignature, new_signature);
-            new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).updateCourse(targetSignature, new_signature);
+            db.update(TABLE, generateContentValues(new_course, new_average, new_start, new_end, new_teacher_id, xcolor),
+                    SIGNATURE + "= ?", new String[]{targetCourse});
+
+            DB_Homework_Manager homework_manager = new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+            DB_Exams_Manager exam_manager = new DB_Exams_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+            DB_Schedule_Manager schedule_manager =new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+
+            homework_manager.updateCourse(targetCourse, new_course);
+            exam_manager.updateCourse(targetCourse, new_course);
+            schedule_manager.updateCourse(targetCourse, new_course);
+
+            homework_manager.closeDatabase();
+            exam_manager.closeDatabase();
+            schedule_manager.closeDatabase();
         }catch (SQLException e){
             Log.d("Exception:", e.toString());
         }
@@ -91,11 +95,20 @@ public class DB_Courses_Manager {
         return content;
     }
 
-    public void deleteCourse(String sigTarget){
-        db.delete(TABLE, SIGNATURE + "=?", new String[]{sigTarget});
-        new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByCourse(sigTarget);
-        new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByCourse(sigTarget);
-        new DB_Exams_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version).deleteByCourse(sigTarget);
+    public void deleteCourse(String course){
+        db.delete(TABLE, SIGNATURE + "=?", new String[]{course});
+
+        DB_Homework_Manager homework_manager = new DB_Homework_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+        DB_Exams_Manager exam_manager = new DB_Exams_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+        DB_Schedule_Manager schedule_manager =new DB_Schedule_Manager(activity, DB_Helper.DB_Name, DB_Helper.DB_Version);
+
+        homework_manager.deleteByCourse(course);
+        schedule_manager.deleteByCourse(course);
+        exam_manager.deleteByCourse(course);
+
+        homework_manager.closeDatabase();
+        exam_manager.closeDatabase();
+        schedule_manager.closeDatabase();
     }
 
     public Cursor searchByName(String targetName){

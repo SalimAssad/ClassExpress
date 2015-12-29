@@ -29,7 +29,7 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
     TextView textSignature, textTeacher, textDates;
 
     Cursor cursor;
-    DB_Courses_Manager cursor_manager;
+    DB_Courses_Manager course_manager;
     DB_Schedule_Manager sch_manager;
 
     String course_name;
@@ -49,7 +49,7 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
 
         openedFromSigInfo = true;
 
-        cursor_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        course_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         sch_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
         if(savedInstanceState != null)
@@ -58,14 +58,14 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
             course_name = getArguments().getString(Fragment_courses.SELECTED_COURSE);
 
         if (!wasEdited) {
-            cursor = cursor_manager.searchByName(course_name);
+            cursor = course_manager.searchByName(course_name);
             cursor.moveToNext();//If this is true, then it has not been edited
             initializeAtributtes();
         }
 
         initializeTexts();
 
-        cursor = sch_manager.searchBySignature(course_name);
+        cursor = sch_manager.searchByCourse(course_name);
 
         if(savedInstanceState == null) {
             showSchedule();
@@ -81,6 +81,13 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
         getActivity().setTitle(course_name);
 
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        course_manager.closeDatabase();
+        sch_manager.closeDatabase();
+        super.onDestroyView();
     }
 
     @Override
@@ -133,12 +140,12 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
     }
 
     private void initializeAtributtes() {
-        course_name = cursor.getString(cursor.getColumnIndex(cursor_manager.SIGNATURE));
+        course_name = cursor.getString(cursor.getColumnIndex(course_manager.SIGNATURE));
         course_parent = course_name;
-        teacher = cursor.getString(cursor.getColumnIndex(cursor_manager.TEACHER_NAME));
-        initial_date = cursor.getString(cursor.getColumnIndex(cursor_manager.START));
-        ending_date = cursor.getString(cursor.getColumnIndex(cursor_manager.END));
-        color = cursor.getString(cursor.getColumnIndex(cursor_manager.COLOR));
+        teacher = cursor.getString(cursor.getColumnIndex(course_manager.TEACHER_NAME));
+        initial_date = cursor.getString(cursor.getColumnIndex(course_manager.START));
+        ending_date = cursor.getString(cursor.getColumnIndex(course_manager.END));
+        color = cursor.getString(cursor.getColumnIndex(course_manager.COLOR));
     }
 
     @Override

@@ -185,6 +185,9 @@ public class Fragment_specific_notifications_container extends Fragment implemen
                 return false;
         }
 
+        cursor.close();
+        calendar_manager.closeDatabase();
+
         return true;
     }
 }

@@ -1,13 +1,13 @@
 package com.chacostak.salim.classexpress.Calendar.Day_info;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
 import com.chacostak.salim.classexpress.Calendar.Data.ExamData;
@@ -30,8 +30,6 @@ import java.util.Calendar;
 public class Fragment_day_info extends Fragment implements AdapterView.OnItemClickListener {
 
     View v;
-    Day_info_adapter adapter;
-    ListView list;
 
     Calendar calendar;
     String date;
@@ -68,11 +66,11 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         homeworkData = new ArrayList<>();
         examsData = new ArrayList<>();
 
-        prepareHomeworkAdapter();
-        prepareListHomework();
+        prepareHomeworkData();
+        addHomeworkFragments();
 
-        prepareExamsAdapter();
-        prepareListExams();
+        prepareExamsData();
+        addExamsFragments();
 
         getActivity().setTitle(date);
 
@@ -89,7 +87,7 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
     }
 
     //Sets up the adapter reading the values from the homeworkData base
-    private void prepareHomeworkAdapter() {
+    private void prepareHomeworkData() {
         homeworkData.clear();
 
         Cursor course_cursor;
@@ -115,18 +113,26 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         cursor.close();
 
         homeworkData = sort.bubbleSortCalendarData(homeworkData);
-        adapter = new Day_info_adapter(getActivity(), R.layout.day_info_adapter, homeworkData);
     }
 
-    private void prepareListHomework() {
-        list = (ListView) v.findViewById(R.id.listHomework);
-        list.setAdapter(adapter);
+    private void addHomeworkFragments() {
+        for (int i = 0; i < homeworkData.size(); i++) {
+            Bundle arguments = new Bundle();
+            Fragment_homework_day_info frag = new Fragment_homework_day_info();
+            arguments.putString(Fragment_homework_day_info.TITLE, homeworkData.get(i).getTitle());
+            arguments.putString(Fragment_homework_day_info.DESCRIPTION, ((HomeworkData) homeworkData.get(i)).getDescription());
+            arguments.putString(Fragment_homework_day_info.COURSE, ((HomeworkData) homeworkData.get(i)).getCourse());
+            arguments.putString(Fragment_homework_day_info.DATE, getDate(homeworkData.get(i).getInitialDate()));
+            arguments.putString(Fragment_homework_day_info.COLOR, homeworkData.get(i).getColor());
+            frag.setArguments(arguments);
+            getFragmentManager().beginTransaction().add(R.id.homeworkContainer, frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
-        list.setOnItemClickListener(this);
+        }
     }
 
     //Sets up the adapter reading the values from the homeworkData base
-    private void prepareExamsAdapter() {
+    private void prepareExamsData() {
         examsData.clear();
 
         Cursor course_cursor;
@@ -153,18 +159,40 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
 
 
         examsData = sort.bubbleSortCalendarData(examsData);
-        adapter = new Day_info_adapter(getActivity(), R.layout.day_info_adapter, examsData);
     }
 
-    private void prepareListExams() {
-        list = (ListView) v.findViewById(R.id.listExams);
-        list.setAdapter(adapter);
+    private void addExamsFragments() {
+        for (int i = 0; i < examsData.size(); i++) {
+            Bundle arguments = new Bundle();
+            Fragment_exam_day_info frag = new Fragment_exam_day_info();
+            arguments.putString(Fragment_exam_day_info.TITLE, examsData.get(i).getTitle());
+            arguments.putString(Fragment_exam_day_info.DESCRIPTION, ((ExamData) examsData.get(i)).getRoom());
+            arguments.putString(Fragment_exam_day_info.DATE, getDate(examsData.get(i).getInitialDate()));
+            arguments.putString(Fragment_exam_day_info.COLOR, examsData.get(i).getColor());
+            frag.setArguments(arguments);
+            getFragmentManager().beginTransaction().add(R.id.examsContainer, frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
-        list.setOnItemClickListener(this);
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    private String getDate(Calendar cal) {
+        String am_pm;
+        final int AM_PM = cal.get(Calendar.AM_PM);
+        String minutes = String.valueOf(cal.get(Calendar.MINUTE));
+        if (AM_PM == 0)
+            am_pm = "am";
+        else
+            am_pm = "pm";
+
+        if (minutes.length() == 1)
+            minutes = "0" + minutes;
+
+        return cal.get(Calendar.HOUR) + ":" + minutes + " " + am_pm;
     }
 }

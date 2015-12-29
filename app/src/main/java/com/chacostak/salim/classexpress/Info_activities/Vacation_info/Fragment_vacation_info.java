@@ -62,6 +62,12 @@ public class Fragment_vacation_info extends Fragment implements CompoundButton.O
     }
 
     @Override
+    public void onDestroyView() {
+        vac_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putString(Fragment_add_homework.TITLE, title);
         super.onSaveInstanceState(savedInstanceState);

@@ -156,6 +156,11 @@ public class MainActivity extends ActionBarActivity
                 startActivity(intent);
 
                 return true;
+            case R.id.action_calendar:
+                getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                isHomeAddedToBackStack = true;
+                onSectionAttached(6);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -130,6 +130,12 @@ public class Fragment_add_vacation extends android.app.Fragment implements View.
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        vac_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
     private void setListeners() {
         editBegins.setOnFocusChangeListener(this);
         editEnds.setOnFocusChangeListener(this);

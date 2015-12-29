@@ -117,6 +117,12 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        hw_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
     private void setSpinners() {
         DB_Courses_Manager sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1);

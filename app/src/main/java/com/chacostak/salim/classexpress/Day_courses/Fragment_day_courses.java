@@ -41,8 +41,8 @@ public class Fragment_day_courses extends Fragment implements AdapterView.OnItem
 
     float firstX = 0;
 
-    DB_Schedule_Manager schedule;
-    DB_Courses_Manager sig_manager;
+    DB_Schedule_Manager schedule_manager;
+    DB_Courses_Manager courses_manager;
     Cursor cursor;
 
     ArrayList<EventData> data;
@@ -64,8 +64,8 @@ public class Fragment_day_courses extends Fragment implements AdapterView.OnItem
 
         calendar = Calendar.getInstance();
 
-        schedule = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
-        sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        schedule_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
         dateValidation = new DateValidation(getActivity());
         courseValidation = new CourseValidation();
@@ -82,25 +82,32 @@ public class Fragment_day_courses extends Fragment implements AdapterView.OnItem
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        courses_manager.closeDatabase();
+        schedule_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
     //Sets up the adapter reading the values from the data base
     private void prepareAdapter(){
         data.clear();
-        cursor = schedule.searchByDay(dayName);
+        cursor = schedule_manager.searchByDay(dayName);
         Cursor sig_cursor;
         String signature, starts, ends;
         while(cursor.moveToNext()){
-            signature = cursor.getString(cursor.getColumnIndex(schedule.COURSE));
-            sig_cursor = sig_manager.searchByName(signature);
+            signature = cursor.getString(cursor.getColumnIndex(schedule_manager.COURSE));
+            sig_cursor = courses_manager.searchByName(signature);
             sig_cursor.moveToNext();
-            starts = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.START));
-            ends = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.END));
+            starts = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.START));
+            ends = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.END));
             if(courseValidation.stillInCourse(getActivity(), starts, ends)) {
                 data.add(new EventData());
                 data.get(data.size() - 1).name = signature;
-                data.get(data.size() - 1).initial_time = cursor.getString(cursor.getColumnIndex(schedule.START));
-                data.get(data.size() - 1).ending_time = cursor.getString(cursor.getColumnIndex(schedule.END));
+                data.get(data.size() - 1).initial_time = cursor.getString(cursor.getColumnIndex(schedule_manager.START));
+                data.get(data.size() - 1).ending_time = cursor.getString(cursor.getColumnIndex(schedule_manager.END));
                 data.get(data.size() - 1).remainingTime = dateValidation.getRemainingTime(dateValidation.formatTimeInPm(data.get(data.size() - 1).initial_time));
-                data.get(data.size() - 1).color = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.COLOR));
+                data.get(data.size() - 1).color = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.COLOR));
             }
             sig_cursor.close();
         }
@@ -113,23 +120,23 @@ public class Fragment_day_courses extends Fragment implements AdapterView.OnItem
     //Sets up the adapter reading the values from the data base
     private void updateAdapter(int addOrSubstract){
         data.clear();
-        cursor = schedule.searchByDay(dayName);
+        cursor = schedule_manager.searchByDay(dayName);
         Cursor sig_cursor;
         String signature, starts, ends;
         while(cursor.moveToNext()){
-            signature = cursor.getString(cursor.getColumnIndex(schedule.COURSE));
-            sig_cursor = sig_manager.searchByName(signature);
+            signature = cursor.getString(cursor.getColumnIndex(schedule_manager.COURSE));
+            sig_cursor = courses_manager.searchByName(signature);
             sig_cursor.moveToNext();
-            starts = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.START));
-            ends = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.END));
+            starts = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.START));
+            ends = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.END));
             calendar.add(Calendar.DATE, addOrSubstract);
             if(courseValidation.stillInCourse(getActivity(), calendar, starts, ends)) {  //TODO: DEBUG THIS METHOD
                 data.add(new EventData());
                 data.get(data.size() - 1).name = signature;
-                data.get(data.size() - 1).initial_time = cursor.getString(cursor.getColumnIndex(schedule.START));
-                data.get(data.size() - 1).ending_time = cursor.getString(cursor.getColumnIndex(schedule.END));
+                data.get(data.size() - 1).initial_time = cursor.getString(cursor.getColumnIndex(schedule_manager.START));
+                data.get(data.size() - 1).ending_time = cursor.getString(cursor.getColumnIndex(schedule_manager.END));
                 data.get(data.size() - 1).remainingTime = dateValidation.getRemainingTime(dateValidation.formatTimeInPm(data.get(data.size() - 1).initial_time));
-                data.get(data.size() - 1).color = sig_cursor.getString(sig_cursor.getColumnIndex(sig_manager.COLOR));
+                data.get(data.size() - 1).color = sig_cursor.getString(sig_cursor.getColumnIndex(courses_manager.COLOR));
             }
             sig_cursor.close();
         }

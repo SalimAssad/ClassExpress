@@ -37,9 +37,6 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
     AlarmHandler alarmHandler = null;
     DateValidation dateValidation = null;
     DB_Calendar_Notifications_Manager calendar_manager = null;
-    static DB_Homework_Manager homework_manager = null;
-    static DB_Exams_Manager exam_manager = null;
-
 
     @Override
     public void onReceive(Context xcontext, Intent intent) {
@@ -47,10 +44,6 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
             systemManager = new SystemManager(xcontext);
         if(calendar_manager == null)
             calendar_manager = new DB_Calendar_Notifications_Manager(xcontext, DB_Helper.DB_Name, DB_Helper.DB_Version);
-        if(homework_manager == null)
-            homework_manager = new DB_Homework_Manager(xcontext, DB_Helper.DB_Name, DB_Helper.DB_Version);
-        if(exam_manager == null)
-            exam_manager = new DB_Exams_Manager(xcontext, DB_Helper.DB_Name, DB_Helper.DB_Version);
         if(context == null)
             context = xcontext;
         if(alarmHandler == null)
@@ -78,6 +71,9 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
         data = getNextAlarmData();
         if(data != null)
             alarmHandler.setEventAlarm(xcontext, nextAlarmCalendar, data.name, data.description, data.initial_date, data.initial_time, data.type);
+
+        calendar_manager.closeDatabase();
+        calendar_manager = null;
     }
 
     public EventData getNextAlarmData() {
@@ -123,6 +119,8 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
             }
         }
 
+        cursor.close();
+
         nextAlarmCalendar = c1;
 
         return nextData;
@@ -138,8 +136,7 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
     }
 
     public static EventData getHomeworkData(Context context, String title) {
-        if(homework_manager == null)
-            homework_manager = new DB_Homework_Manager(context, DB_Helper.DB_Name, DB_Helper.DB_Version);
+        DB_Homework_Manager homework_manager = new DB_Homework_Manager(context, DB_Helper.DB_Name, DB_Helper.DB_Version);
 
         EventData data = null;
         Cursor cursor = homework_manager.searchByTitle(title);
@@ -150,12 +147,13 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
             data.type = 'H';
         }
 
+        cursor.close();
+        homework_manager.closeDatabase();
         return data;
     }
 
     public static EventData getExamData(Context context, String date, String time) {
-        if(exam_manager == null)
-            exam_manager = new DB_Exams_Manager(context, DB_Helper.DB_Name, DB_Helper.DB_Version);
+        DB_Exams_Manager exam_manager = new DB_Exams_Manager(context, DB_Helper.DB_Name, DB_Helper.DB_Version);
 
         EventData data = null;
         Cursor cursor = exam_manager.search(date, time);
@@ -166,6 +164,8 @@ public class AlarmEvents extends WakefulBroadcastReceiver {
             data.type = 'E';
         }
 
+        cursor.close();
+        exam_manager.closeDatabase();
         return data;
     }
 }

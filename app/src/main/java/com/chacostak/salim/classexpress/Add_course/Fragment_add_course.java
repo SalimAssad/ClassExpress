@@ -66,7 +66,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     String newEnds;
     String newColor;
 
-    DB_Courses_Manager sig_manager;
+    DB_Courses_Manager course_manager;
     DB_Schedule_Manager sch_manager;
     DB_Teacher_Manager teacher_manager;
 
@@ -78,7 +78,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
         Fragment_course_info.openedFromSigInfo = false; //Important, will double save if not set to false
 
-        sig_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        course_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         sch_manager = new DB_Schedule_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
         teacher_manager = new DB_Teacher_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 
@@ -147,6 +147,14 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
         while (cursor.moveToNext())
             adapter.add(cursor.getString(cursor.getColumnIndex(teacher_manager.NAME)));
         editTeacher.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        course_manager.closeDatabase();
+        sch_manager.closeDatabase();
+        teacher_manager.closeDatabase();
+        super.onDestroyView();
     }
 
     @Override
@@ -291,7 +299,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
     private boolean alreadyExists() {
         String className = editCourse.getText().toString();
         Cursor cursor;
-        cursor = sig_manager.searchByName(className);
+        cursor = course_manager.searchByName(className);
         if (cursor.moveToNext())
             return true;
         else
@@ -312,9 +320,9 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
     private void storeData() {
         if (isBeingEdited)
-            sig_manager.update(oldSignature, newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
+            course_manager.update(oldSignature, newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
         else
-            sig_manager.insert(newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
+            course_manager.insert(newCourse, 0.0, newBegins, newEnds, newTeacher, newColor);
 
 
         if (validateTeachers())

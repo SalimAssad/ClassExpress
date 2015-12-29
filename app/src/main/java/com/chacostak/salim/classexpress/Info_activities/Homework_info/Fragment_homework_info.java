@@ -71,6 +71,12 @@ public class Fragment_homework_info extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        hw_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putString(Fragment_add_homework.TITLE, title);
         super.onSaveInstanceState(savedInstanceState);
@@ -90,13 +96,15 @@ public class Fragment_homework_info extends Fragment {
     }
 
     private void setColors() {
-        Cursor course = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(course_name);
+        DB_Courses_Manager courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        Cursor course = courses_manager.getCourseColor(course_name);
         course.moveToNext();
         String color = course.getString(0);
         textTitle.setBackgroundColor(Color.parseColor(color));
         textDayLimit.setBackgroundColor(Color.parseColor(color));
 
         course.close();
+        courses_manager.closeDatabase();
     }
 
     private void initializeAtributtes() {

@@ -57,6 +57,12 @@ public class Fragment_teacher_info extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        teacher_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putString(Fragment_add_teacher.NAME, name);
         super.onSaveInstanceState(savedInstanceState);

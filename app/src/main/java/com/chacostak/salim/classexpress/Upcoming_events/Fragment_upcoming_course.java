@@ -32,7 +32,7 @@ public class Fragment_upcoming_course extends Fragment implements View.OnClickLi
     BroadcastReceiver broadcastReceiver;
 
     long remainingTime = 0;
-    String signature;
+    String course;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,8 +47,8 @@ public class Fragment_upcoming_course extends Fragment implements View.OnClickLi
         timer_layout = (LinearLayout) v.findViewById(R.id.timer_layout);
 
         if (getArguments() != null) {
-            signature = getArguments().getString(Fragment_home.NAME);
-            textTitle.setText(signature);
+            course = getArguments().getString(Fragment_home.NAME);
+            textTitle.setText(course);
             textMedium.setText(getArguments().getString(Fragment_home.TEACHER));
             textSmall.setText(getArguments().getString(Fragment_home.INITIAL_TIME) + " - " + getArguments().getString(Fragment_home.ENDING_TIME));
             remainingTime = getArguments().getLong(Fragment_home.REMAINING_TIME);
@@ -103,7 +103,7 @@ public class Fragment_upcoming_course extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), Course_info_activity.class);
-        intent.putExtra(Fragment_courses.SELECTED_COURSE, signature);
+        intent.putExtra(Fragment_courses.SELECTED_COURSE, course);
         startActivity(intent);
     }
 }

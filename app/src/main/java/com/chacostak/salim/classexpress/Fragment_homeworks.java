@@ -65,6 +65,19 @@ public class Fragment_homeworks extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
+    public void onDestroyView() {
+        hw_manager.closeDatabase();
+        course_manager.closeDatabase();
+
+        if(action_helper != null) {
+            action_helper.closeDatabase();
+            action_helper = null;
+        }
+
+        super.onDestroyView();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(action_helper.action != null)
             action_helper.select(i);

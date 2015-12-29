@@ -109,7 +109,7 @@ public class DB_Schedule_Manager {
         content.put(DAY_OF_WEEK,xday);
         content.put(CLASSROOM,xid_classroom);
         content.put(START,xstart);
-        content.put(END,xend);
+        content.put(END, xend);
         return content;
     }
 
@@ -141,7 +141,7 @@ public class DB_Schedule_Manager {
         resetAlarms();
     }
 
-    public Cursor searchBySignature(String targetName){
+    public Cursor searchByCourse(String targetName){
         return db.query(TABLE,new String[]{COURSE,DAY_OF_WEEK, CLASSROOM,START,END}, COURSE +"=?",
                 new String[]{targetName},null,null,null);
     }
@@ -153,5 +153,9 @@ public class DB_Schedule_Manager {
 
     public Cursor getAll(){
         return db.query(TABLE,new String[]{COURSE,DAY_OF_WEEK, CLASSROOM,START,END},null,null,null,null,null);
+    }
+
+    public void closeDatabase(){
+        db.close();
     }
 }

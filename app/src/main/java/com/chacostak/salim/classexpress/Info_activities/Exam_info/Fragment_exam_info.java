@@ -70,11 +70,20 @@ public class Fragment_exam_info extends Fragment {
     }
 
     private void setColor() {
-        Cursor cursor = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version).getCourseColor(course_name);
+        DB_Courses_Manager courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
+        Cursor cursor = courses_manager.getCourseColor(course_name);
         cursor.moveToNext();
         String color = cursor.getString(0);
         textCourse.setBackgroundColor(Color.parseColor(color));
         textDayLimit.setBackgroundColor(Color.parseColor(color));
+
+        courses_manager.closeDatabase();
+    }
+
+    @Override
+    public void onDestroyView() {
+        exams_manager.closeDatabase();
+        super.onDestroyView();
     }
 
     @Override

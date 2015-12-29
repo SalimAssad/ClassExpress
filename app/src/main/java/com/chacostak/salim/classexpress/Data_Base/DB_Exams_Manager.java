@@ -53,7 +53,7 @@ public class DB_Exams_Manager {
         }
     }
 
-    public void updateSignature(String targetSignature, String new_signature){
+    public void updateCourse(String targetSignature, String new_signature){
         db.update(TABLE, generateContentValues(new_signature),
                 COURSE + "= ?", new String[]{targetSignature});
     }

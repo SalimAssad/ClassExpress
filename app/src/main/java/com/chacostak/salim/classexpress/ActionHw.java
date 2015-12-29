@@ -1,6 +1,9 @@
 package com.chacostak.salim.classexpress;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,6 +11,7 @@ import android.view.MenuItem;
 
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
+import com.chacostak.salim.classexpress.Utilities.Dialogs;
 import com.chacostak.salim.classexpress.Utilities.EventData;
 
 import java.util.ArrayList;
@@ -15,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Salim on 01/04/2015.
  */
-public class ActionHw implements ActionMode.Callback {
+public class ActionHw implements ActionMode.Callback, DialogInterface.OnClickListener {
 
     DB_Homework_Manager hw_manager;
 
@@ -45,17 +49,26 @@ public class ActionHw implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
         switch(menuItem.getItemId()) {
             case R.id.action_delete:
-                for(int i = 0; i < selected.size(); i++){
-                    adapter.remove(selected.get(i));
-                    hw_manager.deleteByTitle(selected.get(i).name);
-                }
-                adapter.notifyDataSetChanged();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(adapter.getContext());
+                if(sharedPreferences.getBoolean("general_confirmations", true) && sharedPreferences.getBoolean("confirmation_homework", true))
+                    new Dialogs(adapter.getContext()).createConfirmationDialog(R.string.delete, R.string.are_you_sure, R.drawable.ic_launcher, this);
+                else
+                    delete();
 
-                actionMode.finish();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private void delete() {
+        for(int i = 0; i < selected.size(); i++){
+            adapter.remove(selected.get(i));
+            hw_manager.deleteByTitle(selected.get(i).name);
+        }
+        adapter.notifyDataSetChanged();
+
+        action.finish();
     }
 
     @Override
@@ -100,5 +113,15 @@ public class ActionHw implements ActionMode.Callback {
         for(int i = 0; i < adapter.getCount(); i++)
             adapter.deSelect(i);
         selected.clear();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if(which == -1)
+            delete();
+    }
+
+    public void closeDatabase() {
+        hw_manager.closeDatabase();
     }
 }

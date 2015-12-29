@@ -95,4 +95,8 @@ public class DB_Notifications_Manager {
         return db.query(TABLE,new String[]{TAG, TIME_BEFORE, UNIT_TYPE}, TAG + "=? AND " + TIME_BEFORE + "=? AND " + UNIT_TYPE + "=?",
                 new String[]{targetTag, String.valueOf(time_before), unit_type},null,null,null);
     }
+
+    public void closeDatabase(){
+        db.close();
+    }
 }

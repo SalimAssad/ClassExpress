@@ -60,6 +60,13 @@ public class Fragment_next_week_homework extends Fragment{
     }
 
     @Override
+    public void onDestroyView() {
+        homework_manager.closeDatabase();
+        course_manager.closeDatabase();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         checkHomework();

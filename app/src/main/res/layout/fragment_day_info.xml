@@ -10,9 +10,10 @@
         android:layout_alignParentLeft="true"
         android:fillViewport="true">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -20,9 +21,6 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/home_homework"
                 android:id="@+id/textHomework"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp" />
@@ -32,61 +30,42 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
                 android:id="@+id/view"
-                android:layout_below="@+id/textHomework"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
 
-            <ListView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/listHomework"
-                android:layout_below="@+id/view"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp" />
+                android:id="@+id/homeworkContainer"
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/exam"
+                android:text="@string/exams"
                 android:id="@+id/textExam"
-                android:layout_alignParentTop="false"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/listHomework"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
                 android:id="@+id/view2"
-                android:layout_below="@+id/textExam"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
 
-            <ListView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/listExams"
-                android:layout_below="@+id/view2"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp" />
-        </RelativeLayout>
+                android:id="@+id/examsContainer"
+                android:layout_marginBottom="20dp" />
+
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>
