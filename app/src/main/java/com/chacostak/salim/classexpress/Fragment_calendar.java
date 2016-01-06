@@ -80,6 +80,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setCustomView(menu_view);
         }
 
