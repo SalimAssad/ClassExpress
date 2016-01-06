@@ -5,6 +5,9 @@ import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -48,38 +52,11 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         if (savedInstanceState == null) {
-            int positive, negative;
-            ArrayList<Integer> years = new ArrayList<>();
-
             calendar = new ClassExpressCalendar(getActivity(), v);
             selectedYear = calendar.getRealYear();
             selectedMonth = calendar.getRealMonthAbbreviation();
-            positive = selectedYear + 1;
-            negative = selectedYear - 1;
+
             calendar.loadCalendar(calendar.getShowedMonthInt(), selectedYear);
-
-            spinnerMonths = (Spinner) v.findViewById(R.id.spinner_months);
-            adapterMonths = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, getActivity().getResources().getStringArray(R.array.complete_months));
-            spinnerMonths.setAdapter(adapterMonths);
-            spinnerMonths.setSelection(calendar.getMonthInt(calendar.getRealMonthAbbreviation()));
-            spinnerMonths.setOnItemSelectedListener(this);
-
-            spinnerYears = (Spinner) v.findViewById(R.id.spinner_years);
-            for (int i = 0; i < 22; i++) {
-                if (i == 0)
-                    years.add(selectedYear);
-                else {
-                    years.add(positive);
-                    years.add(0, negative);
-                    positive++;
-                    negative--;
-                }
-            }
-
-            adapterYears = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, years);
-            spinnerYears.setAdapter(adapterYears);
-            spinnerYears.setSelection(adapterYears.getPosition(calendar.getShowedYear()));
-            spinnerYears.setOnItemSelectedListener(this);
 
             timePickerDialog = new TimePickerDialog(getActivity(), this, 15, 0, false);
 
@@ -87,9 +64,44 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
                 openedFromCalendarActivity = getArguments().getBoolean(Calendar_activity.OPENED_FROM_CALENDAR_ACTIVITY, false);
 
             calendar.setOnItemClickListener(this);
+
+            View menu_view = LayoutInflater.from(getActivity()).inflate(R.layout.menu_calendar_layout, null);
+
+            spinnerMonths = (Spinner) menu_view.findViewById(R.id.spinner_months);
+            adapterMonths = new ArrayAdapter(getActivity(), R.layout.simple_list_item_activated, getActivity().getResources().getStringArray(R.array.complete_months));
+            spinnerMonths.setAdapter(adapterMonths);
+            spinnerMonths.setOnItemSelectedListener(this);
+
+            spinnerYears = (Spinner) menu_view.findViewById(R.id.spinner_years);
+            adapterYears = new ArrayAdapter(getActivity(), R.layout.simple_list_item_activated, getYears());
+            spinnerYears.setAdapter(adapterYears);
+            spinnerYears.setSelection(adapterYears.getPosition(calendar.getShowedYear()));
+            spinnerYears.setOnItemSelectedListener(this);
+
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(menu_view);
         }
 
         return v;
+    }
+
+    private ArrayList getYears() {
+        ArrayList<Integer> years = new ArrayList<>();
+        int positive = selectedYear + 1;
+        int negative = selectedYear - 1;
+        for (int i = 0; i < 22; i++) {
+            if (i == 0)
+                years.add(selectedYear);
+            else {
+                years.add(positive);
+                years.add(0, negative);
+                positive++;
+                negative--;
+            }
+        }
+
+        return years;
     }
 
     @Override

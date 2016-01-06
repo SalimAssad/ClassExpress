@@ -4,25 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/global_background">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_months"
-            android:layout_gravity="center_horizontal" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_years"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
-
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

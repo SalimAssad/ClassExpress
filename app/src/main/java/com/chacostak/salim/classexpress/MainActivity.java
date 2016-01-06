@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.chacostak.salim.classexpress.Configuration.Settings_activity;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
@@ -29,6 +32,7 @@ public class MainActivity extends ActionBarActivity
     boolean isHomeAddedToBackStack = false;
 
     DB_Helper helper;
+    private boolean isInCalendar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        isInCalendar = false;
         switch(position) {
             case 0:
                 transaction.replace(R.id.container, new Fragment_home()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -94,6 +99,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void loadCalendarFragment() {
+        isInCalendar = true;
+        invalidateOptionsMenu();
         getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         isHomeAddedToBackStack = true;
         onSectionAttached(6);
@@ -127,8 +134,15 @@ public class MainActivity extends ActionBarActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
+        boolean flag;
+        if(isInCalendar)
+            flag = false;
+        else
+            flag = true;
+
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(flag);
+        actionBar.setDisplayShowCustomEnabled(isInCalendar);
         actionBar.setTitle(mTitle);
     }
 
@@ -140,9 +154,20 @@ public class MainActivity extends ActionBarActivity
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
 
-            getMenuInflater().inflate(R.menu.main, menu);
+            if(isInCalendar) {
+                getMenuInflater().inflate(R.menu.calendar_menu, menu);
+            }else {
+                getMenuInflater().inflate(R.menu.main, menu);
+            }
+
             restoreActionBar();
+
             return true;
+        }else{
+            if(isInCalendar){
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setDisplayShowCustomEnabled(false);
+            }
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -174,6 +199,8 @@ public class MainActivity extends ActionBarActivity
         if(isHomeAddedToBackStack) {
             isHomeAddedToBackStack = false;
             mNavigationDrawerFragment.selectItem(0);
+            isInCalendar = false;
+            invalidateOptionsMenu();
         }else
             super.onBackPressed();
     }

@@ -35,9 +35,11 @@ public class CalendarAdapter extends ArrayAdapter {
 
     int rows;
     int screenHeight;
-    int height;
+    int height = -1;
 
     LinearLayout.LayoutParams linearParams;
+
+    RelativeLayout auxLayout = null;
 
     public CalendarAdapter(Context context, int resource, ArrayList xdays, ArrayList xdata, ArrayList xvacData, int xrealDay, int xrealMonth, int xrealYear, int xshowedMonth, int xshowedYear) {
         super(context, resource, xdays);
@@ -51,7 +53,6 @@ public class CalendarAdapter extends ArrayAdapter {
 
         rows = xdays.size()/7;
         screenHeight = ((Activity) context).getWindowManager() .getDefaultDisplay().getHeight();
-        height = screenHeight / (rows+1);
 
         if(!data.isEmpty())
             linearParams = getLinearLayoutParams();
@@ -107,6 +108,16 @@ public class CalendarAdapter extends ArrayAdapter {
             if(days == null)
                 days = getContext().getResources().getStringArray(R.array.abrev_days);
             textDay.setText(days[position]);
+
+            if(height == -1) {
+                if(auxLayout == null)
+                    auxLayout = (RelativeLayout) v.findViewById(R.id.main_layout);
+                else {
+                    screenHeight = screenHeight - 20;
+                    height = screenHeight / rows;
+                    auxLayout = null;
+                }
+            }
         }
 
         return v;
