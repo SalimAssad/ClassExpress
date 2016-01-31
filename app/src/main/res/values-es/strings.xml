@@ -177,18 +177,18 @@
     <string name="are_you_sure">Estas seguro?</string>
     <string name="schedule_error1">Error - Un horario ya existe ese día, con la misma hora inicial o la misma hora de terminación...</string>
     <string-array name="complete_months">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
+        <item><b>January</b></item>
+        <item><b>February</b></item>
+        <item><b>March</b></item>
+        <item><b>April</b></item>
+        <item><b>May</b></item>
+        <item><b>June</b></item>
+        <item><b>July</b></item>
+        <item><b>August</b></item>
+        <item><b>September</b></item>
+        <item><b>October</b></item>
+        <item><b>November</b></item>
+        <item><b>December</b></item>
     </string-array>
 
     <string-array name="abrev_days">

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
 import com.chacostak.salim.classexpress.Calendar.Data.ExamData;
@@ -17,6 +18,7 @@ import com.chacostak.salim.classexpress.Data_Base.DB_Exams_Manager;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
 import com.chacostak.salim.classexpress.Data_Base.DB_Vacations_Manager;
+import com.chacostak.salim.classexpress.Fragment_calendar;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Utilities.DateValidation;
 import com.chacostak.salim.classexpress.Utilities.Sorter;
@@ -27,12 +29,13 @@ import java.util.Calendar;
 /**
  * Created by Salim on 12/04/2015.
  */
-public class Fragment_day_info extends Fragment implements AdapterView.OnItemClickListener {
+public class Fragment_day_info extends Fragment {
 
     View v;
+    TextView textSelectedDate;
 
     Calendar calendar;
-    String date;
+    String date = "";
 
     Cursor cursor;
 
@@ -54,7 +57,7 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         dateValidation = new DateValidation();
 
         if (getArguments() != null) {
-            date = getArguments().getString(Day_info_activity.DATE);
+            date = getArguments().getString(Fragment_calendar.DATE);
             calendar = dateValidation.formatDate(date);
         }
 
@@ -66,15 +69,21 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         homeworkData = new ArrayList<>();
         examsData = new ArrayList<>();
 
-        prepareHomeworkData();
-        addHomeworkFragments();
+        textSelectedDate = (TextView) v.findViewById(R.id.textSelectedDate);
+        textSelectedDate.setText(date);
 
-        prepareExamsData();
-        addExamsFragments();
-
-        getActivity().setTitle(date);
+        load();
 
         return v;
+    }
+
+    private void load() {
+        int tag;
+        prepareHomeworkData();
+        tag = addHomeworkFragments(0);
+
+        prepareExamsData();
+        addExamsFragments(tag);
     }
 
     @Override
@@ -115,7 +124,7 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         homeworkData = sort.bubbleSortCalendarData(homeworkData);
     }
 
-    private void addHomeworkFragments() {
+    private int addHomeworkFragments(int startingTag) {
         for (int i = 0; i < homeworkData.size(); i++) {
             Bundle arguments = new Bundle();
             Fragment_homework_day_info frag = new Fragment_homework_day_info();
@@ -125,10 +134,13 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
             arguments.putString(Fragment_homework_day_info.DATE, getDate(homeworkData.get(i).getInitialDate()));
             arguments.putString(Fragment_homework_day_info.COLOR, homeworkData.get(i).getColor());
             frag.setArguments(arguments);
-            getFragmentManager().beginTransaction().add(R.id.homeworkContainer, frag)
+            getFragmentManager().beginTransaction().add(R.id.homeworkContainer, frag, String.valueOf(startingTag))
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
+            startingTag++;
         }
+
+        return startingTag;
     }
 
     //Sets up the adapter reading the values from the homeworkData base
@@ -161,7 +173,7 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
         examsData = sort.bubbleSortCalendarData(examsData);
     }
 
-    private void addExamsFragments() {
+    private int addExamsFragments(int startingTag) {
         for (int i = 0; i < examsData.size(); i++) {
             Bundle arguments = new Bundle();
             Fragment_exam_day_info frag = new Fragment_exam_day_info();
@@ -170,15 +182,13 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
             arguments.putString(Fragment_exam_day_info.DATE, getDate(examsData.get(i).getInitialDate()));
             arguments.putString(Fragment_exam_day_info.COLOR, examsData.get(i).getColor());
             frag.setArguments(arguments);
-            getFragmentManager().beginTransaction().add(R.id.examsContainer, frag)
+            getFragmentManager().beginTransaction().add(R.id.examsContainer, frag, String.valueOf(startingTag))
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
+            startingTag++;
         }
-    }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        return startingTag;
     }
 
     private String getDate(Calendar cal) {
@@ -194,5 +204,25 @@ public class Fragment_day_info extends Fragment implements AdapterView.OnItemCli
             minutes = "0" + minutes;
 
         return cal.get(Calendar.HOUR) + ":" + minutes + " " + am_pm;
+    }
+
+    public void updateData(String date) {
+        this.date = date;
+        textSelectedDate.setText(date);
+
+        removeFragments();
+        load();
+    }
+
+    private void removeFragments() {
+        int totalSize = homeworkData.size() + examsData.size();
+
+        for (int i = 0; i < totalSize; i++){
+            Fragment frag = getFragmentManager().findFragmentByTag(String.valueOf(i));
+            getFragmentManager().beginTransaction().remove(frag).commit();
+        }
+
+        homeworkData.clear();
+        examsData.clear();
     }
 }

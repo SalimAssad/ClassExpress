@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/global_background">
+    android:background="@drawable/global_background"
+    android:id="@+id/main_layout">
 
-    <GridView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/calendarGridView"
-        android:layout_gravity="center_horizontal"
-        android:numColumns="7" />
+        android:id="@+id/scrollView6"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scroll_view_layout">
+
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/calendarGridView"
+                android:layout_gravity="center_horizontal"
+                android:numColumns="7" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/day_info_container"></LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

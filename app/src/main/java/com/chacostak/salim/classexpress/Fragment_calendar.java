@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import com.chacostak.salim.classexpress.Calendar.Calendar_activity;
 import com.chacostak.salim.classexpress.Calendar.ClassExpressCalendar;
 import com.chacostak.salim.classexpress.Calendar.Day_info.Day_info_activity;
+import com.chacostak.salim.classexpress.Calendar.Day_info.Fragment_day_info;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,8 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     Spinner spinnerMonths, spinnerYears;
     ArrayAdapter adapterMonths, adapterYears;
 
+    Fragment_day_info fragmentDayInfo;
+
     TimePickerDialog timePickerDialog;
 
     String date = "";
@@ -47,11 +50,16 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
     boolean firstRun = true, secondRun = true;
 
+    public static String DATE = "DATE";
+
+    LinearLayout day_info_container = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         if (savedInstanceState == null) {
+            Bundle arguments = new Bundle();
             calendar = new ClassExpressCalendar(getActivity(), v);
             selectedYear = calendar.getRealYear();
             selectedMonth = calendar.getRealMonthAbbreviation();
@@ -82,6 +90,14 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setCustomView(menu_view);
+
+            fragmentDayInfo = new Fragment_day_info();
+            arguments.putString(DATE, calendar.getRealDate());
+            fragmentDayInfo.setArguments(arguments);
+            getFragmentManager().beginTransaction().add(R.id.day_info_container, fragmentDayInfo).commit();
+
+            if(day_info_container == null)
+                day_info_container = (LinearLayout) v.findViewById(R.id.scroll_view_layout);
         }
 
         return v;
@@ -129,6 +145,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
                     break;
             }
             calendar.loadCalendar(calendar.getMonthInt(selectedMonth), selectedYear);
+            calendar.setResized(false);
         }
     }
 
@@ -188,9 +205,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
             date = String.valueOf(day) + "/" + getAbrevMonthName(month) + "/" + String.valueOf(year);
 
-            Intent intent = new Intent(getActivity(), Day_info_activity.class);
-            intent.putExtra(Day_info_activity.DATE, date);
-            startActivity(intent);
+            fragmentDayInfo.updateData(date);
         }
     }
 

@@ -265,7 +265,7 @@ public class DateValidation {
 
     public Calendar formatDateANDTimeInPm(String date){
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy KK:mm a", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm a", Locale.US);
         try {
             calendar.setTime(sdf.parse(date));
         } catch (ParseException e) {
@@ -276,7 +276,7 @@ public class DateValidation {
 
     public Calendar formatTimeInPm(String date){
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("KK:mm a", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
         try {
             calendar.setTime(sdf.parse(date));
         } catch (ParseException e) {

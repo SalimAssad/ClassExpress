@@ -1,6 +1,5 @@
 package com.chacostak.salim.classexpress.Calendar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -33,13 +32,14 @@ public class CalendarAdapter extends ArrayAdapter {
     int showedMonth;
     int showedYear;
 
+    final int COLUMN_HEIGHT = 70;
+    final int DAYS_HEIGHT = 19;
+    public static int height;
+    final int heightCorrection = 10;
+
     int rows;
-    int screenHeight;
-    int height = -1;
 
     LinearLayout.LayoutParams linearParams;
-
-    RelativeLayout auxLayout = null;
 
     public CalendarAdapter(Context context, int resource, ArrayList xdays, ArrayList xdata, ArrayList xvacData, int xrealDay, int xrealMonth, int xrealYear, int xshowedMonth, int xshowedYear) {
         super(context, resource, xdays);
@@ -51,8 +51,9 @@ public class CalendarAdapter extends ArrayAdapter {
         showedMonth = xshowedMonth;
         showedYear = xshowedYear;
 
-        rows = xdays.size()/7;
-        screenHeight = ((Activity) context).getWindowManager() .getDefaultDisplay().getHeight();
+        rows = (xdays.size() / 7) - 1;
+
+        height = (COLUMN_HEIGHT * rows) + DAYS_HEIGHT + heightCorrection;
 
         if(!data.isEmpty())
             linearParams = getLinearLayoutParams();
@@ -71,7 +72,7 @@ public class CalendarAdapter extends ArrayAdapter {
             int day = (int) getItem(position);
             int month;
             boolean isFromOtherMonth = isFromOtherMonth(day, position);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, COLUMN_HEIGHT);
             RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.main_layout);
             v.setLayoutParams(new GridView.LayoutParams(params));
             textDay.setText(String.valueOf(day));
@@ -95,7 +96,7 @@ public class CalendarAdapter extends ArrayAdapter {
                     vacData.remove(0);
             }
             if(isToday(day, month))
-                layout.setBackgroundColor(Color.parseColor("#4E00648D"));
+                textDay.setTextColor(Color.parseColor("#E700B3EF"));
 
             while(eventExistsToday(day, month)){
                 LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.eventsLayout);
@@ -108,16 +109,6 @@ public class CalendarAdapter extends ArrayAdapter {
             if(days == null)
                 days = getContext().getResources().getStringArray(R.array.abrev_days);
             textDay.setText(days[position]);
-
-            if(height == -1) {
-                if(auxLayout == null)
-                    auxLayout = (RelativeLayout) v.findViewById(R.id.main_layout);
-                else {
-                    screenHeight = screenHeight - 20;
-                    height = screenHeight / rows;
-                    auxLayout = null;
-                }
-            }
         }
 
         return v;
@@ -126,13 +117,13 @@ public class CalendarAdapter extends ArrayAdapter {
     private LinearLayout.LayoutParams getLinearLayoutParams() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1;
-        params.setMargins(3,3,3,6);
+        params.height = 10;
+        params.setMargins(3,3,3,5);
         return params;
     }
 
     private TextView getEmptyTextView() {
         TextView myView = new TextView(getContext());
-        myView.setTextSize(8);
         myView.setBackgroundColor(Color.parseColor(data.get(0).getColor()));
         return myView;
     }

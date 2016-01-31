@@ -2,6 +2,8 @@ package com.chacostak.salim.classexpress.Calendar;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.GridView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
@@ -15,7 +17,7 @@ import java.util.Calendar;
 /**
  * Created by Salim on 05/04/2015.
  */
-public abstract class ChacoCalendar {
+public abstract class ChacoCalendar implements ViewTreeObserver.OnGlobalLayoutListener {
 
     Context context;
     GridView gridView;
@@ -37,6 +39,8 @@ public abstract class ChacoCalendar {
     int showedMonth;
     int showedYear;
 
+    private boolean resized = false;
+
     public ChacoCalendar(Context xcontext, View v) {
         context = xcontext;
         gridView = (GridView) v.findViewById(R.id.calendarGridView);
@@ -55,6 +59,8 @@ public abstract class ChacoCalendar {
 
         showedMonth = Rmonth;
         showedYear = Ryear;
+
+        gridView.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     private void calculateDays(int xmonth, int xyear) {
@@ -160,5 +166,23 @@ public abstract class ChacoCalendar {
 
     public int getMonthInt(String monthAbbreviation) {
         return dateValidation.getMonthInt(monthAbbreviation);
+    }
+
+    public String getRealDate() {
+        return calendar.get(Calendar.DAY_OF_MONTH) + "/" + getRealMonthAbbreviation() + "/" + getRealYear();
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        if(!resized){
+            resized = true;
+            ViewGroup.LayoutParams params = gridView.getLayoutParams();
+            params.height = CalendarAdapter.height;
+            gridView.setLayoutParams(params);
+        }
+    }
+
+    public void setResized(boolean value){
+        resized = value;
     }
 }

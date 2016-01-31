@@ -83,21 +83,21 @@ public class ClassExpressCalendar extends ChacoCalendar {
 
         for(int i = start; i < days.size(); i++){
             cursor = homework_manager.searchByDayOfMonth(days.get(i), monthAbbreviation);
-            if(cursor.moveToNext()){
+            while (cursor.moveToNext()){
                 CalendarData d = getHomeworkData(cursor);
                 data.add(d);
             }
             cursor.close();
 
             cursor = exams_manager.searchByDayOfMonth(days.get(i), monthAbbreviation);
-            if(cursor.moveToNext()){
+            while (cursor.moveToNext()){
                 CalendarData d = getExamData(cursor);
                 data.add(d);
             }
             cursor.close();
 
             cursor = vacations_manager.searchByDayOfMonth(days.get(i), monthAbbreviation);
-            if(cursor.moveToNext()){
+            while(cursor.moveToNext()){
                 VacationData d = getVacationData(cursor);
                 vacData.add(d);
             }
