@@ -32,10 +32,9 @@ public class CalendarAdapter extends ArrayAdapter {
     int showedMonth;
     int showedYear;
 
-    final int COLUMN_HEIGHT = 70;
-    final int DAYS_HEIGHT = 19;
+    int COLUMN_HEIGHT;
+    int DAYS_HEIGHT;
     public static int height;
-    final int heightCorrection = 10;
 
     int rows;
 
@@ -53,7 +52,10 @@ public class CalendarAdapter extends ArrayAdapter {
 
         rows = (xdays.size() / 7) - 1;
 
-        height = (COLUMN_HEIGHT * rows) + DAYS_HEIGHT + heightCorrection;
+        COLUMN_HEIGHT = (int) context.getResources().getDimension(R.dimen.calendar_cell_height);
+        DAYS_HEIGHT = (int) context.getResources().getDimension(R.dimen.calendar_day_height);
+
+        height = (COLUMN_HEIGHT * rows) + DAYS_HEIGHT;
 
         if(!data.isEmpty())
             linearParams = getLinearLayoutParams();
@@ -117,7 +119,7 @@ public class CalendarAdapter extends ArrayAdapter {
     private LinearLayout.LayoutParams getLinearLayoutParams() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1;
-        params.height = 10;
+        params.height = (int) getContext().getResources().getDimension(R.dimen.calendar_event_height);
         params.setMargins(3,3,3,5);
         return params;
     }

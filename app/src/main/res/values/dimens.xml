@@ -7,4 +7,8 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="calendar_cell_height">53dp</dimen>
+    <dimen name="calendar_day_height">19dp</dimen>
+    <dimen name="calendar_event_height">10dp</dimen>
 </resources>
