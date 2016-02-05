@@ -55,7 +55,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null) { //TODO: EL FRAGMENTO SE CREA 2 VECES D:
             Bundle arguments = new Bundle();
             calendar = new ClassExpressCalendar(getActivity(), v);
             selectedYear = calendar.getRealYear();

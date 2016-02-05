@@ -37,6 +37,7 @@ public class ClassExpressCalendar extends ChacoCalendar {
     public void loadEvents(int month) {
         data.clear();
         vacData.clear();
+        vacationNode = null;
         Sorter sorter = new Sorter();
 
         loadPastMonthEvents(month);
