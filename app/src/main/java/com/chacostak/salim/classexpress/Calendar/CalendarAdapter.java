@@ -12,8 +12,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
-import com.chacostak.salim.classexpress.Calendar.Data.VacationData;
+import com.chacostak.salim.classexpress.Calendar.Data.Node;
 import com.chacostak.salim.classexpress.R;
+import com.chacostak.salim.classexpress.Utilities.DateValidation;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,13 +25,15 @@ import java.util.Calendar;
 public class CalendarAdapter extends ArrayAdapter {
 
     ArrayList<CalendarData> data;
-    ArrayList<VacationData> vacData;
+    Node vacationInitialNode;
     String days[] = null;
     int realDay;
     int realMonth;
     int realYear;
     int showedMonth;
     int showedYear;
+
+    DateValidation dateValidation;
 
     int COLUMN_HEIGHT;
     int DAYS_HEIGHT;
@@ -40,15 +43,17 @@ public class CalendarAdapter extends ArrayAdapter {
 
     LinearLayout.LayoutParams linearParams;
 
-    public CalendarAdapter(Context context, int resource, ArrayList xdays, ArrayList xdata, ArrayList xvacData, int xrealDay, int xrealMonth, int xrealYear, int xshowedMonth, int xshowedYear) {
+    public CalendarAdapter(Context context, int resource, ArrayList xdays, ArrayList xdata, Node xvacationPointer, int xrealDay, int xrealMonth, int xrealYear, int xshowedMonth, int xshowedYear) {
         super(context, resource, xdays);
         data = xdata;
-        vacData = xvacData;
+        vacationInitialNode = xvacationPointer;
         realDay = xrealDay;
         realMonth = xrealMonth;
         realYear = xrealYear;
         showedMonth = xshowedMonth;
         showedYear = xshowedYear;
+
+        dateValidation = new DateValidation(context);
 
         rows = (xdays.size() / 7) - 1;
 
@@ -75,7 +80,6 @@ public class CalendarAdapter extends ArrayAdapter {
             int month;
             boolean isFromOtherMonth = isFromOtherMonth(day, position);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, COLUMN_HEIGHT);
-            RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.main_layout);
             v.setLayoutParams(new GridView.LayoutParams(params));
             textDay.setText(String.valueOf(day));
 
@@ -89,16 +93,15 @@ public class CalendarAdapter extends ArrayAdapter {
 
             //Valida los colores de fondo
             if(isFromOtherMonth)
-                layout.setBackgroundColor(Color.parseColor("#1E010101"));
+                textDay.setTextColor(Color.parseColor("#FF9F9F9F"));
             if(isInVacation(day, month)){
                 TextView title = (TextView) v.findViewById(R.id.textTitle);
-                title.setText(vacData.get(0).getTitle());
-                layout.setBackgroundColor(Color.parseColor(vacData.get(0).getColor()));
-                if(lastDayOfVacation(day))
-                    vacData.remove(0);
+                title.setBackgroundColor(Color.parseColor("#FFE1E170"));
+                //textDay.setTextColor(Color.parseColor("#FF9A9A3C"));
             }
-            if(isToday(day, month))
+            if(isToday(day, month)) {
                 textDay.setTextColor(Color.parseColor("#E700B3EF"));
+            }
 
             while(eventExistsToday(day, month)){
                 LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.eventsLayout);
@@ -156,24 +159,41 @@ public class CalendarAdapter extends ArrayAdapter {
             return false;
     }
 
+    /*
     private boolean lastDayOfVacation(int day) {
-        if(vacData.get(0).getEndingDate().get(Calendar.DAY_OF_MONTH) == day)
+        if(vacationInitialNode.get(0).getEndingDate().get(Calendar.DAY_OF_MONTH) == day)
             return true;
         else
             return false;
     }
+    */
 
     private boolean isInVacation(int day, int month) {
-        if(vacData.isEmpty())
+        if(vacationInitialNode == null)
             return false;
         else {
             boolean flag = false;
-            int initialDay = vacData.get(0).getInitialDate().get(Calendar.DAY_OF_MONTH);
-            int endingDay = vacData.get(0).getEndingDate().get(Calendar.DAY_OF_MONTH);
-            int initialMonth = vacData.get(0).getInitialDate().get(Calendar.MONTH);
-            int initialYear = vacData.get(0).getInitialDate().get(Calendar.YEAR);
+            String dateArray[] = vacationInitialNode.getDate().split("/");
+            if(day == Integer.parseInt(dateArray[0]) && month == dateValidation.getMonthInt(dateArray[1]) && showedYear == Integer.parseInt(dateArray[2])){
+                flag = true;
+                vacationInitialNode = vacationInitialNode.getNextNode();
+            }
+            return flag;
+        }
+    }
+
+    /*
+    private boolean isInVacation(int day, int month) {
+        if(vacationInitialNode.isEmpty())
+            return false;
+        else {
+            boolean flag = false;
+            int initialDay = vacationInitialNode.get(0).getInitialDate().get(Calendar.DAY_OF_MONTH);
+            int endingDay = vacationInitialNode.get(0).getEndingDate().get(Calendar.DAY_OF_MONTH);
+            int initialMonth = vacationInitialNode.get(0).getInitialDate().get(Calendar.MONTH);
+            int initialYear = vacationInitialNode.get(0).getInitialDate().get(Calendar.YEAR);
             if (initialDay <= day && endingDay >= day) {
-                if (vacData.get(0).isYearly() || initialYear == showedYear) {
+                if (vacationInitialNode.get(0).isYearly() || initialYear == showedYear) {
                     if(initialMonth == month)
                         flag = true;
                 }
@@ -181,4 +201,5 @@ public class CalendarAdapter extends ArrayAdapter {
             return flag;
         }
     }
+    */
 }

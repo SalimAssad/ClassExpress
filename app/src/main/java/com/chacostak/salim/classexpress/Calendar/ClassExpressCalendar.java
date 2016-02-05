@@ -13,6 +13,8 @@ import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
 import com.chacostak.salim.classexpress.Data_Base.DB_Vacations_Manager;
 import com.chacostak.salim.classexpress.Utilities.Sorter;
 
+import java.util.Calendar;
+
 /**
  * Created by Salim on 22/08/2015.
  */
@@ -43,6 +45,12 @@ public class ClassExpressCalendar extends ChacoCalendar {
 
         data = sorter.bubbleSortCalendarData(data);
         vacData = sorter.bubbleSortVacationData(vacData);
+
+        for(int i = 0; i < vacData.size(); i++){
+            storeVacationInNode(vacData.get(i));
+        }
+
+        vacData.clear();
     }
 
     private void loadPastMonthEvents(int month) {
@@ -74,7 +82,7 @@ public class ClassExpressCalendar extends ChacoCalendar {
 
     private void loadNextMonthEvents(int month) {
         Cursor cursor;
-        String monthAbbreviation = getAbrevMonthName(month+1);
+        String monthAbbreviation = getAbrevMonthName(month + 1);
         int start = days.size() - 8;
         for(int i = start; i < days.size(); i++){
             if(days.get(i) == 1)
@@ -165,16 +173,55 @@ public class ClassExpressCalendar extends ChacoCalendar {
         String date2 = cursor.getString(cursor.getColumnIndex(vacations_manager.END));
         if (cursor.getInt(cursor.getColumnIndex(vacations_manager.YEARLY)) == 1) {
             d.setYearly(true);
-            d.setInitialDate(dateValidation.formatDateNoYear(date1));
-            d.setEndingDate(dateValidation.formatDateNoYear(date2));
+            d.setInitialDate(dateValidation.formatDate(date1 + "/" + Calendar.getInstance().get(Calendar.YEAR)));
+            d.setEndingDate(dateValidation.formatDate(date2 + "/" + Calendar.getInstance().get(Calendar.YEAR)));
         } else {
             d.setYearly(false);
             d.setInitialDate(dateValidation.formatDate(date1));
             d.setEndingDate(dateValidation.formatDate(date2));
         }
         d.setType('V');
-        d.setColor("#9FEEEEDD");
+        d.setColor("#FFE1E170");
+
         return d;
+    }
+
+    private void storeVacationInNode(VacationData d) {
+        String date;
+        Calendar realCalendar = Calendar.getInstance();
+        int endingDay = d.getEndingDate().get(Calendar.DAY_OF_MONTH), initialDay = d.getInitialDate().get(Calendar.DAY_OF_MONTH);
+        int endingMonth = d.getEndingDate().get(Calendar.MONTH), initialMonth = d.getInitialDate().get(Calendar.MONTH);
+        int endingYear, initialYear;
+
+        if(d.isYearly()){
+            endingYear = realCalendar.get(Calendar.YEAR);
+            initialYear = endingYear;
+            d.getEndingDate().set(Calendar.YEAR, endingYear);
+        }else{
+            endingYear = d.getEndingDate().get(Calendar.YEAR);
+            initialYear = d.getInitialDate().get(Calendar.YEAR);
+        }
+
+        date = initialDay + "/" + getAbrevMonthName(initialMonth) + "/" + initialYear;
+
+        addToVacationNode(date, d.getTitle());
+
+        if(endingDay > initialDay || endingMonth > initialMonth || endingYear > initialYear){
+            Calendar cal = (Calendar) d.getEndingDate().clone();
+            int year;
+            cal.set(initialYear, initialMonth, initialDay);
+            while(cal.before(d.getEndingDate())){
+                cal.add(Calendar.DATE, 1);
+                if(d.isYearly()) {
+                    year = realCalendar.get(Calendar.YEAR);
+                }else{
+                    year = cal.get(Calendar.YEAR);
+                }
+
+                date = cal.get(Calendar.DAY_OF_MONTH) + "/" + getAbrevMonthName(cal.get(Calendar.MONTH)) + "/" + year;
+                addToVacationNode(date, d.getTitle());
+            }
+        }
     }
 
     public void closeDatabases() {

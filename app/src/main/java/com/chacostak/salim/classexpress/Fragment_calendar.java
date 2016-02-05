@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +18,6 @@ import android.widget.TimePicker;
 
 import com.chacostak.salim.classexpress.Calendar.Calendar_activity;
 import com.chacostak.salim.classexpress.Calendar.ClassExpressCalendar;
-import com.chacostak.salim.classexpress.Calendar.Day_info.Day_info_activity;
 import com.chacostak.salim.classexpress.Calendar.Day_info.Fragment_day_info;
 
 import java.util.ArrayList;
@@ -50,7 +46,8 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
     boolean firstRun = true, secondRun = true;
 
-    public static String DATE = "DATE";
+    public static final String DATE = "DATE";
+    public static final String VACATION_TITLE = "VACATION_TITLE";
 
     LinearLayout day_info_container = null;
 
@@ -78,6 +75,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             spinnerMonths = (Spinner) menu_view.findViewById(R.id.spinner_months);
             adapterMonths = new ArrayAdapter(getActivity(), R.layout.simple_list_item_activated, getActivity().getResources().getStringArray(R.array.complete_months));
             spinnerMonths.setAdapter(adapterMonths);
+            spinnerMonths.setSelection(calendar.getShowedMonthInt());
             spinnerMonths.setOnItemSelectedListener(this);
 
             spinnerYears = (Spinner) menu_view.findViewById(R.id.spinner_years);
@@ -93,10 +91,11 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
             fragmentDayInfo = new Fragment_day_info();
             arguments.putString(DATE, calendar.getRealDate());
+            arguments.putString(VACATION_TITLE, calendar.getVacationTitle(calendar.getRealDate()));
             fragmentDayInfo.setArguments(arguments);
             getFragmentManager().beginTransaction().add(R.id.day_info_container, fragmentDayInfo).commit();
 
-            if(day_info_container == null)
+            if (day_info_container == null)
                 day_info_container = (LinearLayout) v.findViewById(R.id.scroll_view_layout);
         }
 
@@ -123,16 +122,16 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onDestroyView() {
-        if(calendar != null)
+        if (calendar != null)
             calendar.closeDatabases(); //If not closed, might leak connections
         super.onDestroyView();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(firstRun)
+        if (firstRun)
             firstRun = false;
-        else if(secondRun)
+        else if (secondRun)
             secondRun = false;
         else {
             switch (parent.getId()) {
@@ -176,40 +175,6 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (openedFromCalendarActivity)
-            calendarActivityEvents(position);
-        else{
-            openDayInfoActivity(position);
-        }
-    }
-
-    private void openDayInfoActivity(int position) {
-        if (position > 6) {
-            String date;
-            int day = getDay(position);
-            int month = getShowedMonthInt();
-            int year = getShowedYear();
-            if (position < 13 && day > 7) {
-                if (month == 0) {
-                    month = 11;
-                    year--;
-                } else
-                    month--;
-            } else if (position > 25 && day < 7) {
-                if (month == 11) {
-                    month = 0;
-                    year++;
-                } else
-                    month++;
-            }
-
-            date = String.valueOf(day) + "/" + getAbrevMonthName(month) + "/" + String.valueOf(year);
-
-            fragmentDayInfo.updateData(date);
-        }
-    }
-
-    private void calendarActivityEvents(int position) {
         if (position > 6) {
             int day = getDay(position);
             int month = getShowedMonthInt();
@@ -230,7 +195,10 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
 
             date = String.valueOf(day) + "/" + getAbrevMonthName(month) + "/" + String.valueOf(year);
 
-            timePickerDialog.show();
+            if (openedFromCalendarActivity)
+                timePickerDialog.show();
+
+            fragmentDayInfo.updateData(date, calendar.getVacationTitle(date));
         }
     }
 

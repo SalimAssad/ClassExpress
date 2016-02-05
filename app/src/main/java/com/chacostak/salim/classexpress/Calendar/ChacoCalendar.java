@@ -7,6 +7,7 @@ import android.view.ViewTreeObserver;
 import android.widget.GridView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
+import com.chacostak.salim.classexpress.Calendar.Data.Node;
 import com.chacostak.salim.classexpress.Calendar.Data.VacationData;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Utilities.DateValidation;
@@ -29,6 +30,9 @@ public abstract class ChacoCalendar implements ViewTreeObserver.OnGlobalLayoutLi
     ArrayList<VacationData> vacData;
 
     DateValidation dateValidation;
+
+    Node vacationNode = null;
+    Node vacationPointer = null;
 
     int RdayOfMonth;
     int Rmonth;
@@ -158,7 +162,7 @@ public abstract class ChacoCalendar implements ViewTreeObserver.OnGlobalLayoutLi
         calculateDays(selectedMonth, selectedYear);
         loadEvents(selectedMonth);
 
-        adapter = new CalendarAdapter(context, R.layout.calendar_adapter, days, data, vacData, RdayOfMonth, Rmonth, Ryear, showedMonth, showedYear);
+        adapter = new CalendarAdapter(context, R.layout.calendar_adapter, days, data, vacationPointer, RdayOfMonth, Rmonth, Ryear, showedMonth, showedYear);
         gridView.setAdapter(adapter);
     }
 
@@ -184,5 +188,38 @@ public abstract class ChacoCalendar implements ViewTreeObserver.OnGlobalLayoutLi
 
     public void setResized(boolean value){
         resized = value;
+    }
+
+    public String getVacationTitle(String realDate) {
+        Node node = vacationNode;
+        String title = null;
+        while(node != null){
+            if(node.getDate().equals(realDate)){
+                title = node.getTitle();
+                break;
+            }else{
+                node = node.getNextNode();
+            }
+        }
+
+        return title;
+    }
+
+    public void addToVacationNode(String date, String title){
+        if(vacationNode == null){  //Stores the vacations in nodes, so it can be easily acquired when necessary
+            vacationNode = new Node();
+            vacationNode.setDate(date);
+            vacationNode.setTitle(title);
+            vacationPointer = vacationNode;
+        }else{
+            Node aux = vacationNode;
+            Node node = new Node();
+            node.setDate(date);
+            node.setTitle(title);
+            while(aux.getNextNode() != null){
+                aux = aux.getNextNode();
+            }
+            aux.setNextNode(node);
+        }
     }
 }

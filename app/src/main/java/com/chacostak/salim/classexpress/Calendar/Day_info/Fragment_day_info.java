@@ -3,11 +3,11 @@ package com.chacostak.salim.classexpress.Calendar.Day_info;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.chacostak.salim.classexpress.Calendar.Data.CalendarData;
@@ -37,6 +37,8 @@ public class Fragment_day_info extends Fragment {
     Calendar calendar;
     String date = "";
 
+    String vacationTitle = null;
+
     Cursor cursor;
 
     ArrayList<CalendarData> homeworkData;
@@ -58,6 +60,7 @@ public class Fragment_day_info extends Fragment {
 
         if (getArguments() != null) {
             date = getArguments().getString(Fragment_calendar.DATE);
+            vacationTitle = getArguments().getString(Fragment_calendar.VACATION_TITLE);
             calendar = dateValidation.formatDate(date);
         }
 
@@ -69,12 +72,23 @@ public class Fragment_day_info extends Fragment {
         homeworkData = new ArrayList<>();
         examsData = new ArrayList<>();
 
+        vacationTitle = getVacationTitle();
+
         textSelectedDate = (TextView) v.findViewById(R.id.textSelectedDate);
-        textSelectedDate.setText(date);
+        if(vacationTitle == null)
+            textSelectedDate.setText(date);
+        else {
+            textSelectedDate.setText(date + " - " + vacationTitle);
+            textSelectedDate.setBackgroundColor(Color.parseColor("#FFE1E170"));
+        }
 
         load();
 
         return v;
+    }
+
+    private String getVacationTitle() {
+         return vacations_manager.getTitleByDate(date);
     }
 
     private void load() {
@@ -206,9 +220,16 @@ public class Fragment_day_info extends Fragment {
         return cal.get(Calendar.HOUR) + ":" + minutes + " " + am_pm;
     }
 
-    public void updateData(String date) {
+    public void updateData(String date, String xvacationTitle) {
         this.date = date;
-        textSelectedDate.setText(date);
+        vacationTitle = xvacationTitle;
+        if(vacationTitle == null) {
+            textSelectedDate.setText(date);
+            textSelectedDate.setBackgroundColor(Color.parseColor("#da000000"));
+        } else {
+            textSelectedDate.setText(date + " - " + vacationTitle);
+            textSelectedDate.setBackgroundColor(Color.parseColor("#FFC2C25E"));
+        }
 
         removeFragments();
         load();

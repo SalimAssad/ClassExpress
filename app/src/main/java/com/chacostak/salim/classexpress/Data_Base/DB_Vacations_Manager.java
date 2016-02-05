@@ -107,6 +107,26 @@ public class DB_Vacations_Manager {
         return db.query(TABLE, new String[]{TITLE, START, END, YEARLY}, START + " LIKE ?", new String[]{dayOfMonth}, null, null, null);
     }
 
+    public String getTitleByDate(String date) {
+        String[] array = date.split("/");
+        String title = null;
+        Cursor cursor = db.query(TABLE, new String[]{TITLE, YEARLY, START}, START + " LIKE ? OR " + END + " LIKE ?", new String[]{array[0] + "/" + array[1], array[0]+"/"+array[1]}, null, null, null);
+
+        while(cursor.moveToNext()){
+            if(cursor.getInt(1) == 1){
+                title = cursor.getString(0);
+                break;
+            }else{
+                String year = cursor.getString(2).split("/")[2];
+                if(year.equals(array[2])){
+                    title = cursor.getString(0);
+                    break;
+                }
+            }
+        }
+        return title;
+    }
+
     public void closeDatabase(){
         db.close();
     }

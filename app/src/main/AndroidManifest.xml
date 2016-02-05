@@ -81,8 +81,6 @@
             android:name=".Notifications.AlarmEvents"
             android:enabled="true"
             android:process=":remote" />
-
-        <activity android:name=".Calendar.Day_info.Day_info_activity"></activity>
     </application>
 
 </manifest>
