@@ -49,7 +49,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     public static final String DATE = "DATE";
     public static final String VACATION_TITLE = "VACATION_TITLE";
 
-    LinearLayout day_info_container = null;
+    //LinearLayout day_info_container = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,8 +95,10 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             fragmentDayInfo.setArguments(arguments);
             getFragmentManager().beginTransaction().add(R.id.day_info_container, fragmentDayInfo).commit();
 
+            /*
             if (day_info_container == null)
                 day_info_container = (LinearLayout) v.findViewById(R.id.scroll_view_layout);
+            */
         }
 
         return v;

@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.chacostak.salim.classexpress.Utilities.EventData;
-
 import java.util.Calendar;
 
 /**
@@ -28,7 +26,7 @@ public class AlarmHandler extends Fragment {
         intent.putExtra(AlarmCourses.INITIAL_TIME, initial_time);
         intent.putExtra(AlarmCourses.ALARM, time);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, AlarmCourses.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); //TODO: Update this so it works with doze mode on android 6.0
     }
 
     public void setEventAlarm(Context activity, Calendar calendar, String title, String description, String date, String time, char type) {
@@ -42,7 +40,7 @@ public class AlarmHandler extends Fragment {
         intent.putExtra(AlarmEvents.TIME, time);
         intent.putExtra(AlarmEvents.TYPE, type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, AlarmEvents.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); //TODO: Update this so it works with doze mode on android 6.0
     }
 
     public boolean courseAlarmIsSet(Context activity) {

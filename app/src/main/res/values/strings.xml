@@ -205,4 +205,7 @@
 
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
+    <string name="pref_header_backup">Backup</string>
+    <string name="backup_successful">The backup was completed successfully</string>
+    <string name="restore_successful">The backup was restored successfully</string>
 </resources>

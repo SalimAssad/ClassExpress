@@ -8,4 +8,8 @@
         android:title="@string/pref_header_delete_confirmations">
         <extra android:name="settings" android:value="delete_confirmation"></extra>
     </header>
+    <header android:fragment="com.chacostak.salim.classexpress.Configuration.Backup_and_restore.Fragment_backup"
+        android:title="@string/pref_header_backup">
+        <extra android:name="settings" android:value="backup_and_restore"></extra>
+    </header>
 </preference-headers>
