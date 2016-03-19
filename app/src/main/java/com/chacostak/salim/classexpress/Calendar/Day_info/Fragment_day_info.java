@@ -79,12 +79,24 @@ public class Fragment_day_info extends Fragment {
             textSelectedDate.setText(date);
         else {
             textSelectedDate.setText(date + " - " + vacationTitle);
-            textSelectedDate.setBackgroundColor(Color.parseColor("#FFE1E170"));
+            textSelectedDate.setBackgroundColor(Color.parseColor("#FFC2C25E"));
         }
 
-        load();
+        //load();
 
         return v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeFragments();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        load();
     }
 
     private String getVacationTitle() {
@@ -209,6 +221,7 @@ public class Fragment_day_info extends Fragment {
         String am_pm;
         final int AM_PM = cal.get(Calendar.AM_PM);
         String minutes = String.valueOf(cal.get(Calendar.MINUTE));
+        int hour = cal.get(Calendar.HOUR);
         if (AM_PM == 0)
             am_pm = "am";
         else
@@ -217,7 +230,11 @@ public class Fragment_day_info extends Fragment {
         if (minutes.length() == 1)
             minutes = "0" + minutes;
 
-        return cal.get(Calendar.HOUR) + ":" + minutes + " " + am_pm;
+        if(hour == 0){
+            hour = 12;
+        }
+
+        return date + " - " + hour + ":" + minutes + " " + am_pm;
     }
 
     public void updateData(String date, String xvacationTitle) {

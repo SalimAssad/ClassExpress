@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chacostak.salim.classexpress.Fragment_home;
-import com.chacostak.salim.classexpress.Fragment_homeworks;
+import com.chacostak.salim.classexpress.Fragment_homework;
 import com.chacostak.salim.classexpress.Info_activities.Homework_info.Homework_info_activity;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Services.CountDownService;
@@ -121,7 +121,7 @@ public class Fragment_upcoming_homework extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), Homework_info_activity.class);
-        intent.putExtra(Fragment_homeworks.SELECTED_HOMEWORK, title);
+        intent.putExtra(Fragment_homework.SELECTED_HOMEWORK, title);
         startActivity(intent);
     }
 

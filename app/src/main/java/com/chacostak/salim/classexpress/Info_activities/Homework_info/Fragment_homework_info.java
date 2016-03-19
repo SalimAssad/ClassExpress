@@ -13,7 +13,7 @@ import com.chacostak.salim.classexpress.Add_homework.Fragment_add_homework;
 import com.chacostak.salim.classexpress.Data_Base.DB_Courses_Manager;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
-import com.chacostak.salim.classexpress.Fragment_homeworks;
+import com.chacostak.salim.classexpress.Fragment_homework;
 import com.chacostak.salim.classexpress.Notifications.Specific_notifications.Fragment_specific_notifications_container;
 import com.chacostak.salim.classexpress.R;
 
@@ -45,7 +45,7 @@ public class Fragment_homework_info extends Fragment {
         if(savedInstanceState != null)
             title = savedInstanceState.getString(Fragment_add_homework.TITLE);
         else if(!wasEdited)
-            title = getArguments().getString(Fragment_homeworks.SELECTED_HOMEWORK);
+            title = getArguments().getString(Fragment_homework.SELECTED_HOMEWORK);
 
         if(savedInstanceState == null){
             Fragment_specific_notifications_container frag = new Fragment_specific_notifications_container();

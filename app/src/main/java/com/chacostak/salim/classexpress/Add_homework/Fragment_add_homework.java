@@ -57,9 +57,9 @@ public class Fragment_add_homework extends Fragment implements View.OnClickListe
     int newPriority;
 
     public static final String COURSE_NAME = "COURSE_NAME";
-    public static final String TITLE = "EMAIL";
-    public static final String DESCRIPTION = "WEB_PAGE";
-    public static final String DAY_LIMIT = "PHONE";
+    public static final String TITLE = "TITLE";
+    public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String DAY_LIMIT = "DAY_LIMIT";
     public static final String TIME_LIMIT = "TIME_LIMIT";
     public static final String REMOVE = "REMOVE";
 

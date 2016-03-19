@@ -61,7 +61,7 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             selectedYear = calendar.getRealYear();
             selectedMonth = calendar.getRealMonthAbbreviation();
 
-            calendar.loadCalendar(calendar.getShowedMonthInt(), selectedYear);
+            //calendar.loadCalendar(calendar.getShowedMonthInt(), selectedYear);
 
             timePickerDialog = new TimePickerDialog(getActivity(), this, 15, 0, false);
 
@@ -94,14 +94,15 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             arguments.putString(VACATION_TITLE, calendar.getVacationTitle(calendar.getRealDate()));
             fragmentDayInfo.setArguments(arguments);
             getFragmentManager().beginTransaction().add(R.id.day_info_container, fragmentDayInfo).commit();
-
-            /*
-            if (day_info_container == null)
-                day_info_container = (LinearLayout) v.findViewById(R.id.scroll_view_layout);
-            */
         }
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        calendar.loadCalendar(calendar.getShowedMonthInt(), selectedYear);
     }
 
     private ArrayList getYears() {
@@ -126,6 +127,12 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
     public void onDestroyView() {
         if (calendar != null)
             calendar.closeDatabases(); //If not closed, might leak connections
+
+        if(fragmentDayInfo != null){
+            getFragmentManager().beginTransaction().remove(fragmentDayInfo).commit();
+            fragmentDayInfo = null;
+        }
+
         super.onDestroyView();
     }
 

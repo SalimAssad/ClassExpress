@@ -110,7 +110,7 @@ public class DB_Vacations_Manager {
     public String getTitleByDate(String date) {
         String[] array = date.split("/");
         String title = null;
-        Cursor cursor = db.query(TABLE, new String[]{TITLE, YEARLY, START}, START + " LIKE ? OR " + END + " LIKE ?", new String[]{array[0] + "/" + array[1], array[0]+"/"+array[1]}, null, null, null);
+        Cursor cursor = db.query(TABLE, new String[]{TITLE, YEARLY, START}, START + " LIKE ? OR " + END + " LIKE ?", new String[]{array[0] + "/" + array[1] + "%", array[0]+"/"+array[1] + "%"}, null, null, null);
 
         while(cursor.moveToNext()){
             if(cursor.getInt(1) == 1){

@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.chacostak.salim.classexpress.Configuration.Settings_activity;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
@@ -32,7 +29,7 @@ public class MainActivity extends ActionBarActivity
     boolean isHomeAddedToBackStack = false;
 
     DB_Helper helper;
-    private boolean isInCalendar = false;
+    static private boolean isInCalendar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,37 +57,42 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        isInCalendar = false;
         switch(position) {
             case 0:
                 transaction.replace(R.id.container, new Fragment_home()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = false;
                 onSectionAttached(0);
+                isInCalendar = false;
                 break;
             case 1:
                 transaction.replace(R.id.container, new Fragment_courses()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = true;
                 onSectionAttached(1);
+                isInCalendar = false;
                 break;
             case 2:
-                transaction.replace(R.id.container, new Fragment_homeworks()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                transaction.replace(R.id.container, new Fragment_homework()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = true;
                 onSectionAttached(2);
+                isInCalendar = false;
                 break;
             case 3:
                 transaction.replace(R.id.container, new Fragment_exams()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = true;
                 onSectionAttached(3);
+                isInCalendar = false;
                 break;
             case 4:
                 transaction.replace(R.id.container, new Fragment_teachers()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = true;
                 onSectionAttached(4);
+                isInCalendar = false;
                 break;
             case 5:
                 transaction.replace(R.id.container, new Fragment_vacations()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 isHomeAddedToBackStack = true;
                 onSectionAttached(5);
+                isInCalendar = false;
                 break;
             case 6:
                 loadCalendarFragment();
@@ -99,11 +101,13 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void loadCalendarFragment() {
-        isInCalendar = true;
-        invalidateOptionsMenu();
-        getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-        isHomeAddedToBackStack = true;
-        onSectionAttached(6);
+        if(!isInCalendar) {
+            isInCalendar = true;
+            invalidateOptionsMenu();
+            getFragmentManager().beginTransaction().replace(R.id.container, new Fragment_calendar()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+            isHomeAddedToBackStack = true;
+            onSectionAttached(6);
+        }
     }
 
     public void onSectionAttached(int number) {

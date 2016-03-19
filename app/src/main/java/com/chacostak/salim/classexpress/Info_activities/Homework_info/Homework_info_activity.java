@@ -15,7 +15,7 @@ import com.chacostak.salim.classexpress.Add_homework.Add_homework_activity;
 import com.chacostak.salim.classexpress.Add_homework.Fragment_add_homework;
 import com.chacostak.salim.classexpress.Data_Base.DB_Helper;
 import com.chacostak.salim.classexpress.Data_Base.DB_Homework_Manager;
-import com.chacostak.salim.classexpress.Fragment_homeworks;
+import com.chacostak.salim.classexpress.Fragment_homework;
 import com.chacostak.salim.classexpress.R;
 import com.chacostak.salim.classexpress.Utilities.ADmob;
 import com.chacostak.salim.classexpress.Utilities.Dialogs;
@@ -38,7 +38,7 @@ public class Homework_info_activity extends ActionBarActivity implements DialogI
         if(savedInstanceState == null) {
             frag = new Fragment_homework_info();
             Bundle arguments = new Bundle();
-            arguments.putString(Fragment_homeworks.SELECTED_HOMEWORK, getIntent().getStringExtra(Fragment_homeworks.SELECTED_HOMEWORK));
+            arguments.putString(Fragment_homework.SELECTED_HOMEWORK, getIntent().getStringExtra(Fragment_homework.SELECTED_HOMEWORK));
             frag.setArguments(arguments);
             thread = new Thread(new Runnable() {
                 @Override

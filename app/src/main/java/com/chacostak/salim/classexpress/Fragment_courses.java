@@ -37,7 +37,7 @@ public class Fragment_courses extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_signatures, container, false);
+        v = inflater.inflate(R.layout.fragment_courses, container, false);
 
         courses_manager = new DB_Courses_Manager(getActivity(), DB_Helper.DB_Name, DB_Helper.DB_Version);
 

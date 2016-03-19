@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by Salim on 31/03/2015.
  */
-public class Fragment_homeworks extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
+public class Fragment_homework extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
 
     View v;
     DB_Homework_Manager hw_manager;

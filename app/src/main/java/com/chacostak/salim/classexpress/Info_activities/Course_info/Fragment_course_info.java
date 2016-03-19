@@ -45,7 +45,7 @@ public class Fragment_course_info extends android.app.Fragment implements View.O
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        v = inflater.inflate(R.layout.fragment_signature_info, container, false);
+        v = inflater.inflate(R.layout.fragment_course_info, container, false);
 
         openedFromSigInfo = true;
 

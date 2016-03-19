@@ -1,5 +1,6 @@
 package com.chacostak.salim.classexpress.Calendar.Day_info;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chacostak.salim.classexpress.Fragment_exams;
+import com.chacostak.salim.classexpress.Fragment_homework;
+import com.chacostak.salim.classexpress.Info_activities.Exam_info.Exam_info_activity;
+import com.chacostak.salim.classexpress.Info_activities.Homework_info.Homework_info_activity;
 import com.chacostak.salim.classexpress.R;
 
 /**
  * Created by Salim on 27/12/2015.
  */
-public class Fragment_exam_day_info extends Fragment_day_event {
+public class Fragment_exam_day_info extends Fragment_day_event implements View.OnClickListener {
 
     View v;
 
@@ -46,12 +51,21 @@ public class Fragment_exam_day_info extends Fragment_day_event {
 
             textTitle.setText(title);
             textDescription.setText(description);
-            textDate.setText(date);
+            textDate.setText(date.split(" - ")[1]);
 
             textTitle.setBackgroundColor(Color.parseColor(color));
             textDate.setBackgroundColor(Color.parseColor(color));
+
+            v.setOnClickListener(this);
         }
 
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), Exam_info_activity.class);
+        intent.putExtra(Fragment_exams.SELECTED_EXAM, date);
+        startActivity(intent);
     }
 }

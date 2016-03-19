@@ -74,7 +74,7 @@ public class Fragment_add_course extends android.app.Fragment implements View.On
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_add_signature, container, false);
+        v = inflater.inflate(R.layout.fragment_add_course, container, false);
 
         Fragment_course_info.openedFromSigInfo = false; //Important, will double save if not set to false
 
