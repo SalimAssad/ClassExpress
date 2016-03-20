@@ -129,7 +129,11 @@ public class Fragment_calendar extends Fragment implements AdapterView.OnItemSel
             calendar.closeDatabases(); //If not closed, might leak connections
 
         if(fragmentDayInfo != null){
-            getFragmentManager().beginTransaction().remove(fragmentDayInfo).commit();
+            try {
+                getFragmentManager().beginTransaction().remove(fragmentDayInfo).commit();
+            }catch (IllegalStateException e){
+
+            }
             fragmentDayInfo = null;
         }
 
